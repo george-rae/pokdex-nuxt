@@ -1,40 +1,36 @@
 <script setup lang="ts">
-	import { usePokedexStore } from "~/stores/pokedex";
 	import generations from "~/config/generations";
+	loading.value = false;
 
-	usePokedexStore().$reset();
+	definePageMeta({
+		layout: "gen-list",
+	});
 </script>
 
 <template>
-	<main class="generations">
-		<h2 class="generations__header">Choose your Gen</h2>
-		<ul class="generations__list">
-			<li
-				class="generations__item"
-				:class="`generations__item--${generation.slug}`"
-				v-for="generation in generations"
-				:key="generation.label"
-				@click="
-					$router.push({
-						name: 'generations-id',
-						params: { id: generation.ID },
-					})
-				">
-				<p class="generations__label">
-					{{ generation.label }}
-				</p>
-				<img
-					:src="`/generations/generation--${generation.slug}@2x.png`"
-					:alt="`Generation ${generation.slug}`" />
-			</li>
-		</ul>
-	</main>
+	<h2 class="generations__header">Choose your Gen</h2>
+	<ul class="generations__list">
+		<li
+			class="generations__item"
+			:class="`generations__item--${key}`"
+			v-for="(value, key) in generations"
+			:key="value.label"
+			@click="goTo('generations-id', { id: key })">
+			<p class="generations__label">
+				{{ value.label }}
+			</p>
+			<img
+				:src="`/generations/generation--${key}@2x.png`"
+				:alt="`Generation ${key}`" />
+		</li>
+	</ul>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.generations {
 		@include flex-y;
 		gap: 24px;
+		min-height: 100vh;
 		padding: 48px 24px;
 
 		&__header {
@@ -49,13 +45,14 @@
 		}
 
 		&__list {
-			display: grid;
+			@include flex-x(center, center, wrap);
 			gap: 24px;
 		}
 
 		&__item {
 			position: relative;
 
+			flex: 0 0 100%;
 			@include flex-y($align: center);
 			height: clamp(150px, 25vh, 200px);
 			padding: 12px;
@@ -114,19 +111,18 @@
 			height: 100%;
 			padding: 24px;
 
-			&__list {
-				grid-template-columns: repeat(2, 50%);
-				justify-content: center;
+			&__item {
+				flex-basis: calc(50% - 12px);
 			}
 		}
 
 		@media screen and (min-width: 900px) {
-			&__list {
-				grid-template-columns: repeat(3, 30%);
-			}
+			&__item {
+				flex-basis: calc(33% - 18px);
 
-			&__item img {
-				width: 90%;
+				img {
+					width: 90%;
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { loading } from "./utils/loading";
+	import { loading } from "@/composables/loading";
 	import Theme from "./components/icons/Theme.vue";
 
 	const { theme } = useAppConfig();
@@ -15,15 +15,17 @@
 </script>
 
 <template>
-	<NuxtPage />
-	<Loading :class="{ loading: loadState }" />
-	<Theme @theme-change="theme.dark = !theme.dark" />
-	<img class="background-pokeball" src="/pokeball.svg" alt="Pokeball icon" />
+	<NuxtLayout>
+		<NuxtPage />
+
+		<Loading :class="{ loading: loadState }" />
+		<Theme @theme-change="theme.dark = !theme.dark" />
+	</NuxtLayout>
 </template>
 
 <style lang="scss">
 	.background-pokeball {
-		position: absolute;
+		position: fixed;
 		bottom: -50vh;
 		right: -50vh;
 
