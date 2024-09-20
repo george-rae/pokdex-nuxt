@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import type { PokeState, Species, Pokemon, PokemonList } from "@/types/pokemon";
-import { fetchData } from "@/utils/helpers";
-import { loading } from "@/utils/loading";
+import type { PokeState, PokemonList, MinorDetails } from "@/types/pokemon";
+import { loading } from "@/composables/loading";
+import generations from "~/config/generations";
 
 export const usePokedexStore = defineStore("pokedex", {
 	state: (): PokeState => ({
@@ -9,10 +9,6 @@ export const usePokedexStore = defineStore("pokedex", {
 		pokemons: [],
 		currentLength: 0,
 		currentMax: 151,
-		cardDetails: {
-			types: [],
-			sprite: "",
-		},
 	}),
 	getters: {
 		getPokedexID: (state) => state.ID,
@@ -25,8 +21,7 @@ export const usePokedexStore = defineStore("pokedex", {
 		 * @example <caption>resets state and changes gen.</caption>
 		 * pokedex.changeGen(ID as number);
 		 */
-		changeGen(gen: number): void {
-			loading.value = true;
+		changeGen(gen: number | string): void {
 			this.$reset();
 			this.ID = gen;
 		},
@@ -37,46 +32,44 @@ export const usePokedexStore = defineStore("pokedex", {
 		 * @example <caption>Asynchronous fetching Pokemon (12 at a time for purpose built lazy loading)</caption>
 		 * await pokedex.fetchPokemon(pokedex.ID);
 		 */
-		async fetchPokemon(ID: number = 2): Promise<void> {
-			const pokemon = await fetchData("pokedex", ID);
+		async fetchPokemon(key: number | string = 1): Promise<void> {
+			const ID = generations[key].ID;
 
-			const entries: PokemonList[] = pokemon.pokemon_entries;
-			entries.map(async (entry) => {
-				const details = await this.fetchMinorDetails(
-					entry.pokemon_species.name
-				);
+			const pokemon = await fetchData("pokedex", ID).then(
+				(value) => value.pokemon_entries
+			);
 
-				entry.details = details;
-			});
+			await Promise.all(
+				pokemon.map(async (entry: PokemonList) => {
+					// need to get the species first as some pokemon returned from `pokedex` call
+					// do not match their name in the API calls for /pokemon/{name}...
+					const species: { name: string; is_legendary: boolean } =
+						await fetchData("pokemon-species", entry.pokemon_species.name).then(
+							(value) => {
+								return {
+									name: value.varieties[0].pokemon.name,
+									is_legendary: value.is_legendary,
+								};
+							}
+						);
 
-			console.log(entries);
+					const details: MinorDetails = await fetchData(
+						"pokemon",
+						species.name
+					).then((detail) => {
+						return {
+							types: [...detail.types],
+							id: detail.id,
+							sprite: detail.sprites.other["official-artwork"].front_default,
+							is_legendary: species.is_legendary,
+						};
+					});
 
-			// push the spread array to the state variable so the result can be cached with a getter.
-			this.pokemons.push(...pokemon.pokemon_entries);
-			loading.value = false;
-		},
-		/**
-		 * A further wrapping and mutation of returned fetched API data for some small amount of details on the preview cards (Home View).
-		 *
-		 * @example <caption>Asynchronous fetching Pokemons minor details, so that it can be shown on the preview card</caption>
-		 * const details = await pokedex.fetchMinorDetails(props.name);
-		 * const { sprite, types, ID } = details;
-		 */
-		async fetchMinorDetails(pokemon: string): Promise<any> {
-			// need to get the species first as some pokemon returned from `pokedex` call
-			// do not match their name in the API calls for /pokemon/{name}...
-			const species: Species = await fetchData("pokemon-species", pokemon);
-			const APIName: string = species.varieties[0].pokemon.name;
-
-			// use the filtered API name to make the fetch()
-			const details: Pokemon = await fetchData("pokemon", APIName);
-
-			return {
-				types: [...details.types],
-				id: details.id,
-				sprite: details.sprites.other["official-artwork"].front_default,
-				is_legendary: species.is_legendary,
-			};
+					return { ...entry, details: details };
+				})
+			)
+				.then((value) => (this.pokemons = value))
+				.finally(() => (loading.value = false));
 		},
 	},
 });

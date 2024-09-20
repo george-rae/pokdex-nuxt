@@ -30,8 +30,10 @@
 
 			font-size: 45px;
 			font-weight: 700;
+			color: var(--theme-colour);
 
 			cursor: pointer;
+			transition: all 0.3s ease-in-out;
 		}
 
 		&__cards {

@@ -1,7 +1,10 @@
 // Generation list types
+type GenerationsList = {
+	[key: number | string]: Generation;
+};
+
 type Generation = {
 	label: string;
-	slug: number | string;
 	ID: number;
 };
 
@@ -63,14 +66,10 @@ type Sprites = {
 
 // State Type
 export type PokeState = {
-	ID: number;
+	ID: number | string;
 	pokemons: PokemonList[];
 	currentLength: number;
 	currentMax: number;
-	cardDetails: {
-		types: list;
-		sprite: string;
-	};
 };
 
 // API Return value types
@@ -88,7 +87,7 @@ export type Pokedex = Ref<{
 export type PokemonList = {
 	entry_number: number;
 	pokemon_species: PokemonGeneric;
-	details?: MinorDetails;
+	details: MinorDetails;
 };
 
 export type Species = {

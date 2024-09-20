@@ -24,3 +24,14 @@ export async function fetchData(
 export function generateLetters(letters: string) {
 	return [...letters.split("")];
 }
+
+export function goTo(
+	route: string,
+	params?: { [key: string]: string | number }
+) {
+	loading.value = true;
+
+	const router = useRouter();
+
+	router.push({ name: route, params: params });
+}
