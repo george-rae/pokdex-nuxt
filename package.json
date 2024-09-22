@@ -1,6 +1,5 @@
 {
 	"name": "pokedex-nuxt",
-	"private": true,
 	"type": "module",
 	"scripts": {
 		"build": "nuxt build",
@@ -16,5 +15,8 @@
 	},
 	"devDependencies": {
 		"sass": "latest"
+	},
+	"engines": {
+		"node": "20.x"
 	}
 }

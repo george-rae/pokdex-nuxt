@@ -1,9 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	css: ["~/assets/styles/_main.scss"],
-	compatibilityDate: "2024-04-03",
-	devtools: { enabled: true },
-	ssr: false,
 	app: {
 		head: {
 			title: "George Rae | Pokedex",
@@ -32,6 +28,13 @@ export default defineNuxtConfig({
 			],
 		},
 	},
+	css: ["~/assets/styles/_main.scss"],
+	compatibilityDate: "2024-04-03",
+	devtools: { enabled: true },
+	ssr: false,
+	nitro: {
+		preset: "node-server",
+	},
 	vite: {
 		css: {
 			preprocessorOptions: {
@@ -40,6 +43,9 @@ export default defineNuxtConfig({
 					silenceDeprecations: ["legacy-js-api"],
 				},
 			},
+		},
+		server: {
+			middlewareMode: true,
 		},
 	},
 
