@@ -8,14 +8,15 @@
 	const menuOpen = ref(false);
 
 	const pokedex = usePokedexStore();
+	const ID = pokedex.getPokedexID;
 	const pokemons = pokedex.getPokemon;
 </script>
 
 <template>
 	<main class="pokedex">
 		<header class="pokedex__header">
-			<h1 class="pokedex__title" @click="goTo('/')">
-				Gen {{ pokedex.getPokedexID }}
+			<h1 class="pokedex__title" @click="goTo('index')">
+				{{ ID !== "national" ? `Gen ${ID}` : ID }}
 			</h1>
 			<button
 				type="button"
@@ -37,15 +38,17 @@
 			</nav>
 		</header>
 		<section class="pokedex__cards">
-			<Card v-for="pokemon in pokemons" :pokemon="pokemon" />
+			<Card
+				v-for="(pokemon, index) in pokemons"
+				:pokemon="pokemon"
+				:class="{ active: index < 12 }"
+				:key="index" />
 		</section>
 	</main>
 </template>
 
 <style lang="scss" scoped>
 	.pokedex {
-		$header-padding: 24px;
-
 		@include flex-y;
 		height: 100vh;
 		overflow: hidden;
@@ -55,24 +58,22 @@
 			height: max-content;
 			padding: $header-padding;
 
-			font-size: 45px;
+			font-size: $font--title;
 			font-weight: 700;
+			text-transform: capitalize;
 			color: var(--theme-colour);
 
 			transition: all 0.3s ease-in-out;
+			cursor: pointer;
 		}
 
 		&__button {
 			position: relative;
 
 			@include flex-y($align: flex-end);
-			gap: 12px;
-			height: 28px;
-			width: 36px;
+			height: $spacing--m;
+			width: $spacing--l;
 			padding: 0;
-
-			font-size: 20px;
-			font-weight: 700;
 
 			background: transparent;
 			border: 0;
@@ -81,32 +82,29 @@
 			z-index: 10;
 
 			.bun {
-				$height: 6px;
-
 				position: absolute;
 				top: 0;
 
 				width: 100%;
-				max-width: 36px;
-				height: $height;
+				max-width: $spacing--l;
+				height: $spacing--xs;
 
 				background: var(--theme-colour);
-				border-radius: 5px;
+				border-radius: $spacing--xs;
 
 				transition: all 0.3s ease-out;
 
 				&--bottom {
-					top: calc(100% - $height);
+					top: calc(100% - $spacing--xs);
 
-					max-width: 26px;
+					max-width: $spacing--m;
 				}
 			}
 
 			&.active {
 				.bun {
-					top: 11px;
-					right: 2px;
-					max-width: 32px;
+					top: 9px;
+					max-width: $spacing--l;
 
 					transition: all 0.3s ease-out;
 					transform: rotateZ(-45deg);
@@ -120,9 +118,9 @@
 
 		&__menu {
 			position: fixed;
-			top: $header-padding - 4px;
-			right: $header-padding - 4px;
-			bottom: calc(100% - 4px);
+			top: $header-padding - $spacing--xs;
+			right: $header-padding - $spacing--xs;
+			bottom: calc(100% - $spacing--xs);
 
 			width: 0vw;
 
@@ -169,9 +167,9 @@
 			height: 100%;
 			width: 100%;
 			gap: 20px;
-			padding: 24px 48px;
+			padding: 0 $spacing--xl;
 
-			font-size: 24px;
+			font-size: $font--heading;
 			color: var(--theme-colour);
 
 			opacity: 0;

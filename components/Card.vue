@@ -10,13 +10,34 @@
 		props.pokemon.details.types.length > 1
 			? `${props.pokemon.details.types[0].type.name}-${props.pokemon.details.types[1].type.name}`
 			: props.pokemon.details.types[0].type.name;
+
+	const card = ref<Element | null>(null);
+	const active = ref<boolean>(false);
+
+	onMounted(() => {
+		const observer = new IntersectionObserver(
+			(card) => {
+				const { isIntersecting, target } = card[0];
+
+				if (isIntersecting) target.classList.add("active");
+			},
+			{ threshold: 0 }
+		);
+
+		observer.observe(card.value as Element);
+	});
 </script>
 
 <template>
 	<article
 		class="card"
-		:class="`card--${type} card--${pokemon.pokemon_species.name}`">
-		<section class="card__info">
+		:class="[
+			{ active: active },
+			`card--${type}`,
+			`card--${pokemon.pokemon_species.name}`,
+		]"
+		ref="card">
+		<hgroup class="card__info">
 			<h2 class="card__name">{{ pokemon.pokemon_species.name }}</h2>
 			<h3 class="card__id">Region ID: #{{ pokemon.details.id }}</h3>
 			<div class="card__types">
@@ -27,7 +48,7 @@
 			<span v-if="pokemon.details.is_legendary" class="card__legendary"
 				>Legendary</span
 			>
-		</section>
+		</hgroup>
 		<img
 			:src="pokemon.details.sprite as string"
 			:alt="`${pokemon.details.id} sprite`" />
@@ -41,23 +62,21 @@
 	.card {
 		position: relative;
 
-		padding: 32px 18px;
-
-		filter: drop-shadow(0px 0px 10px var(--theme-box-shadow));
-		// border-radius: 10px;
-		box-shadow: 0 0 0 0 var(--theme-box-shadow);
+		padding: $spacing--l $spacing--m;
 
 		overflow: hidden;
 		cursor: pointer;
 		opacity: 0;
 
-		animation: fadeIn 450ms linear 1 forwards;
+		&.active {
+			animation: fadeIn 450ms linear 1 forwards;
 
-		transition: all 0.3s ease-in-out;
+			transition: all 0.3s ease-in-out;
 
-		@for $i from 1 through 250 {
-			&:nth-child(250n + #{$i}) {
-				animation-delay: 100ms * $i;
+			@for $i from 1 through 12 {
+				&:nth-child(#{$i}) {
+					animation-delay: 100ms * $i;
+				}
 			}
 		}
 
@@ -214,20 +233,9 @@
 			transition: opacity 0.3s ease-in-out;
 		}
 
-		&:hover {
-			box-shadow: 0 0 5px 5px var(--theme-box-shadow);
-			transition: all 0.3s ease-in-out;
-
-			&::before {
-				opacity: 1;
-				transition: opacity 0.3s ease-in-out;
-			}
-		}
-
-		@media screen and (min-width: 1600px) {
-			img {
-				right: -45px;
-			}
+		&:hover::before {
+			opacity: 1;
+			transition: opacity 0.3s ease-in-out;
 		}
 	}
 
@@ -237,7 +245,7 @@
 			transform: translateY(20px);
 		}
 		100% {
-			opacity: 0.8;
+			opacity: 0.75;
 			transform: translateY(0px);
 		}
 	}

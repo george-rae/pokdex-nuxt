@@ -8,7 +8,7 @@
 </script>
 
 <template>
-	<h2 class="generations__header">Choose your Gen</h2>
+	<h1 class="generations__header">Choose your Gen</h1>
 	<ul class="generations__list">
 		<li
 			class="generations__item"
@@ -29,13 +29,13 @@
 <style lang="scss">
 	.generations {
 		@include flex-y;
-		gap: 24px;
+		gap: $spacing--l;
 		min-height: 100vh;
-		padding: 48px 24px;
+		padding: $spacing--xl $spacing--m;
 
 		&__header {
 			color: transparent;
-			font-size: clamp(24px, 10vw, 48px);
+			font-size: $font--title;
 			font-weight: bold;
 			text-align: center;
 
@@ -46,7 +46,7 @@
 
 		&__list {
 			@include flex-x(center, center, wrap);
-			gap: 24px;
+			gap: $spacing--m;
 		}
 
 		&__item {
@@ -54,12 +54,12 @@
 
 			flex: 0 0 100%;
 			@include flex-y($align: center);
-			height: clamp(150px, 25vh, 200px);
-			padding: 12px;
+			height: clamp(150px, 25vh, 350px);
+			padding: $spacing--m;
 
-			border-radius: 12px;
+			border-radius: $spacing--s;
 			background: var(--theme-background);
-			box-shadow: 0px 0px 12px 1px var(--theme-box-shadow);
+			box-shadow: 0px 0px $spacing--s 1px var(--theme-box-shadow);
 			overflow: hidden;
 			opacity: 0;
 
@@ -68,7 +68,7 @@
 			transition: all 0.3s ease-in-out;
 
 			img {
-				width: 80%;
+				width: 90%;
 				height: auto;
 				z-index: 1;
 
@@ -79,7 +79,7 @@
 			&--national {
 				img {
 					width: 100%;
-					margin-top: -12px;
+					margin-top: -$spacing--s;
 				}
 			}
 
@@ -90,7 +90,7 @@
 			}
 
 			&:hover {
-				box-shadow: 0 0 6px 6px var(--theme-box-shadow);
+				box-shadow: 0 0 $spacing--xs $spacing--xs var(--theme-box-shadow);
 				transition: all 0.3s ease-in-out;
 				filter: brightness(0.85);
 
@@ -109,10 +109,10 @@
 
 		@media screen and (min-width: 600px) {
 			height: 100%;
-			padding: 24px;
+			padding: $spacing--m;
 
 			&__item {
-				flex-basis: calc(50% - 12px);
+				flex-basis: calc(50% - $spacing--s);
 			}
 		}
 
@@ -128,7 +128,7 @@
 
 		@media screen and (min-width: 1200px) {
 			@include flex-y(center, center);
-			gap: 48px;
+			gap: $spacing--xl;
 			&__list {
 				max-width: 1200px;
 			}
@@ -144,7 +144,6 @@
 			}
 
 			&__item {
-				height: clamp(150px, 25vh, 350px);
 				img {
 					width: 90%;
 				}
@@ -155,7 +154,7 @@
 	@keyframes fadeIn {
 		0% {
 			opacity: 0;
-			transform: translateY(24px);
+			transform: translateY($spacing--m);
 		}
 		100% {
 			opacity: 1;

@@ -1,78 +1,78 @@
 // UTLITIES
 .max-width {
-  width: clamp(300px, 100%, 1280px);
+	width: clamp(300px, 100%, 1280px);
 }
 
 // FUNCTIONS/MIXINS
 
 @function values($val) {
-  $top: 0;
-  $right: 0;
-  $bottom: 0;
-  $left: 0;
+	$top: 0;
+	$right: 0;
+	$bottom: 0;
+	$left: 0;
 
-  @if length($val) > 0 {
-    $all: nth($val, 1);
-    $top: $all;
-    $right: $all;
-    $bottom: $all;
-    $left: $all;
-  }
-  @if length($val) > 1 {
-    $left: nth($val, 2);
-    $right: nth($val, 2);
-  }
-  @if length($val) > 2 {
-    $bottom: nth($val, 3);
-  }
-  @if length($val) > 3 {
-    $left: nth($val, 4);
-  }
+	@if length($val) > 0 {
+		$all: nth($val, 1);
+		$top: $all;
+		$right: $all;
+		$bottom: $all;
+		$left: $all;
+	}
+	@if length($val) > 1 {
+		$left: nth($val, 2);
+		$right: nth($val, 2);
+	}
+	@if length($val) > 2 {
+		$bottom: nth($val, 3);
+	}
+	@if length($val) > 3 {
+		$left: nth($val, 4);
+	}
 
-  @return (top: $top, right: $right, bottom: $bottom, left: $left);
+	@return (top: $top, right: $right, bottom: $bottom, left: $left);
 }
 
 @mixin position($positions...) {
-  $positions: values($positions);
+	$positions: values($positions);
 
-  position: absolute;
-  top: map-get($positions, "top");
-  right: map-get($positions, "right");
-  bottom: map-get($positions, "bottom");
-  left: map-get($positions, "left");
+	position: absolute;
+	top: map-get($positions, "top");
+	right: map-get($positions, "right");
+	bottom: map-get($positions, "bottom");
+	left: map-get($positions, "left");
 }
 
 @function tint($colour, $percentage) {
-  @return mix($colour, #fff, $percentage);
+	@return mix($colour, #fff, $percentage);
 }
 
 @mixin flex-x($justify: false, $align: false, $wrap: false) {
-  display: flex;
-  @if $justify {
-    justify-content: $justify;
-  }
-  @if $align {
-    align-items: $align;
-  }
-  @if $wrap {
-    flex-wrap: $wrap;
-  }
+	display: flex;
+	@if $justify {
+		justify-content: $justify;
+	}
+	@if $align {
+		align-items: $align;
+	}
+	@if $wrap {
+		flex-wrap: $wrap;
+	}
 }
 
 @mixin flex-y($justify: false, $align: false, $wrap: false) {
-  @include flex-x($justify, $align, $wrap);
-  flex-direction: column;
+	@include flex-x($justify, $align, $wrap);
+	flex-direction: column;
 }
 
 @mixin absolute-fill() {
-  @include position(0);
+	@include position(0);
 }
 
 @mixin circle($dimensions) {
-  height: $dimensions;
-  width: $dimensions;
+	height: $dimensions;
+	width: $dimensions;
 
-  border-radius: 50%;
+	border-radius: 50%;
 }
 
 // TYPE COLOURS
@@ -101,15 +101,29 @@ $colour-great-ball: #33669a;
 
 // GEN COLOURS
 body {
-  --colour-gen-1: #acd36c;
-  --colour-gen-2: #ada85f;
-  --colour-gen-3: #9cd7c8;
-  --colour-gen-4: #b7a3c3;
-  --colour-gen-5: #9fcadf;
-  --colour-gen-6: #dd608c;
-  --colour-gen-7: #e89483;
-  --colour-gen-8: #c97dc0;
-  --colour-gen-9: #6f6f6f;
+	--colour-gen-1: #acd36c;
+	--colour-gen-2: #ada85f;
+	--colour-gen-3: #9cd7c8;
+	--colour-gen-4: #b7a3c3;
+	--colour-gen-5: #9fcadf;
+	--colour-gen-6: #dd608c;
+	--colour-gen-7: #e89483;
+	--colour-gen-8: #c97dc0;
+	--colour-gen-9: #6f6f6f;
 }
 
-$header-padding: 25px;
+// SPACING
+$spacing: 24px;
+$spacing--xs: $spacing * 0.25; // 6px
+$spacing--s: $spacing * 0.5; // 12px
+$spacing--m: $spacing; // 24px
+$spacing--l: $spacing * 1.5; // 36px
+$spacing--xl: $spacing * 2; // 48px
+
+$header-padding: $spacing;
+
+// FONT SIZING
+$font--body: 16px;
+$font--medium: 18px;
+$font--heading: 24px;
+$font--title: clamp($font--heading, 10vw, $font--heading * 2);
