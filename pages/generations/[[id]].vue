@@ -189,5 +189,25 @@
 			grid-auto-rows: 25vh;
 			overflow: auto;
 		}
+
+		@media screen and (min-width: 700px) {
+			&__cards {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+
+		@media screen and (min-width: 1100px) {
+			&__cards {
+				grid-auto-rows: 35vh;
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+
+		@media screen and (min-width: 1800px) {
+			&__cards {
+				grid-auto-rows: 35vh;
+				grid-template-columns: repeat(4, 1fr);
+			}
+		}
 	}
 </style>
