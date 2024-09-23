@@ -5,7 +5,7 @@ import generations from "~/config/generations";
 
 export const usePokedexStore = defineStore("pokedex", {
 	state: (): PokeState => ({
-		ID: 2,
+		ID: 1,
 		pokemons: [],
 		currentLength: 0,
 		currentMax: 151,
@@ -27,9 +27,10 @@ export const usePokedexStore = defineStore("pokedex", {
 		},
 		/**
 		 * A further wrapping and mutation of returned fetched API data list of all pokemon in the chosen gen.
-		 * Loads 12 at a time, as loading all 151 in the first load of the page is very intensive, so loads on the fly.
+		 * Loads all in the first load, then removes the state variable for loading once the promise resolves.
+		 * The `getPokemon` getter can then be used to return the pinia variable this method applies to.
 		 *
-		 * @example <caption>Asynchronous fetching Pokemon (12 at a time for purpose built lazy loading)</caption>
+		 * @example <caption>Asynchronous fetching Pokemon</caption>
 		 * await pokedex.fetchPokemon(pokedex.ID);
 		 */
 		async fetchPokemon(key: number | string = 1): Promise<void> {

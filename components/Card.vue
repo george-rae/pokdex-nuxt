@@ -13,7 +13,7 @@
 </script>
 
 <template>
-	<li
+	<article
 		class="card"
 		:class="`card--${type} card--${pokemon.pokemon_species.name}`">
 		<section class="card__info">
@@ -32,7 +32,7 @@
 			:src="pokemon.details.sprite as string"
 			:alt="`${pokemon.details.id} sprite`" />
 		<span class="card__entry">Entry: #{{ pokemon.entry_number }}</span>
-	</li>
+	</article>
 </template>
 
 <style lang="scss" scoped>
