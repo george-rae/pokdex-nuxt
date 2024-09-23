@@ -3,6 +3,8 @@
 	import Theme from "./components/icons/Theme.vue";
 
 	const { theme } = useAppConfig();
+	theme.dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
 	const themeClass: ComputedRef<"theme--dark" | "theme--light"> = computed(() =>
 		theme.dark ? "theme--dark" : "theme--light"
 	);
