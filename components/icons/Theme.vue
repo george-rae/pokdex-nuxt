@@ -13,12 +13,12 @@
 
 <style lang="scss" scoped>
 	.theme-change {
-		position: absolute;
-		top: 6px;
+		position: fixed;
+		bottom: 6px;
 		right: 6px;
 
-		height: 50px;
-		width: 50px;
+		height: 60px;
+		width: 60px;
 
 		cursor: pointer;
 		z-index: 20;

@@ -41,7 +41,6 @@
 	.card {
 		position: relative;
 
-		height: clamp(150px, 25vh, 400px);
 		padding: 32px 18px;
 
 		filter: drop-shadow(0px 0px 10px var(--theme-box-shadow));
@@ -189,7 +188,7 @@
 		img {
 			position: absolute;
 			top: 50%;
-			right: 10px;
+			right: 16px;
 
 			height: 100%;
 			width: auto;
