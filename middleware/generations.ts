@@ -4,8 +4,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	const { id } = to.params;
 	const pokedexId = id === "" ? "national" : id;
 
-	const pokedex = usePokedexStore();
-	pokedex.changeGen(pokedexId as string);
+	const parsedId = isNaN(parseFloat(pokedexId as string))
+		? (pokedexId as string)
+		: parseFloat(pokedexId as string);
 
-	await pokedex.fetchPokemon(pokedexId as string);
+	const pokedex = usePokedexStore();
+	pokedex.changeGen(parsedId);
+
+	await pokedex.fetchPokemon(parsedId);
 });

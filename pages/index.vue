@@ -54,7 +54,7 @@
 
 			flex: 0 0 100%;
 			@include flex-y($align: center);
-			height: clamp(150px, 25vh, 350px);
+			height: clamp(150px, 25vh, 220px);
 			padding: $spacing--m;
 
 			border-radius: $spacing--s;
@@ -83,9 +83,9 @@
 				}
 			}
 
-			@for $i from 1 through 9 {
+			@for $i from 1 through 12 {
 				&:nth-child(#{$i}) {
-					animation-delay: 250ms * $i;
+					animation-delay: 100ms * $i;
 				}
 			}
 
@@ -117,6 +117,8 @@
 		}
 
 		@media screen and (min-width: 900px) {
+			@include flex-y(center, center);
+			gap: $spacing--xl;
 			&__item {
 				flex-basis: calc(33% - 18px);
 
@@ -127,8 +129,6 @@
 		}
 
 		@media screen and (min-width: 1200px) {
-			@include flex-y(center, center);
-			gap: $spacing--xl;
 			&__list {
 				max-width: 1200px;
 			}
@@ -140,13 +140,11 @@
 
 		@media screen and (min-width: 2000px) {
 			&__list {
-				max-width: 1600px;
+				max-width: 1400px;
 			}
 
 			&__item {
-				img {
-					width: 90%;
-				}
+				height: clamp(150px, 25vh, 250px);
 			}
 		}
 	}

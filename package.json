@@ -10,6 +10,9 @@
 	},
 	"dependencies": {
 		"@pinia/nuxt": "latest",
+		"@vueuse/components": "^11.1.0",
+		"@vueuse/core": "^11.1.0",
+		"@vueuse/nuxt": "^11.1.0",
 		"nuxt": "latest",
 		"vue": "latest"
 	},

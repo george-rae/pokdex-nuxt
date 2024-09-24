@@ -12,6 +12,7 @@ export const usePokedexStore = defineStore("pokedex", {
 	}),
 	getters: {
 		getPokedexID: (state) => state.ID,
+		getPokedexLabel: (state) => generations[state.ID].label,
 		getPokemon: (state) => state.pokemons,
 	},
 	actions: {

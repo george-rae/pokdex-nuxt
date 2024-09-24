@@ -126,4 +126,26 @@ $header-padding: $spacing;
 $font--body: 16px;
 $font--medium: 18px;
 $font--heading: 24px;
-$font--title: clamp($font--heading, 10vw, $font--heading * 2);
+$font--title: clamp($font--heading, 7vw, $font--heading * 2);
+
+// VARIABLES
+$types: (
+	"normal": $colour-normal,
+	"fire": $colour-fire,
+	"water": $colour-water,
+	"electric": $colour-electric,
+	"grass": $colour-grass,
+	"ice": $colour-ice,
+	"fighting": $colour-fighting,
+	"poison": $colour-poison,
+	"ground": $colour-ground,
+	"flying": $colour-flying,
+	"psychic": $colour-psychic,
+	"bug": $colour-bug,
+	"rock": $colour-rock,
+	"ghost": $colour-ghost,
+	"dragon": $colour-dragon,
+	"dark": $colour-dark,
+	"steel": $colour-steel,
+	"fairy": $colour-fairy,
+);

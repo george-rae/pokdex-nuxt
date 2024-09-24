@@ -27,11 +27,16 @@ export function generateLetters(letters: string) {
 
 export function goTo(
 	route: string,
-	params?: { [key: string]: string | number }
+	params?: { [key: string]: number | string }
 ) {
-	loading.value = true;
-
 	const router = useRouter();
+	const { currentRoute } = router;
+	const isCurrentRoute =
+		currentRoute.value.name === route &&
+		currentRoute.value.params.id === params?.id;
 
+	if (isCurrentRoute) return;
+
+	loading.value = true;
 	router.push({ name: route, params: params });
 }

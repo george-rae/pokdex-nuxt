@@ -41,7 +41,10 @@
 			<h2 class="card__name">{{ pokemon.pokemon_species.name }}</h2>
 			<h3 class="card__id">Region ID: #{{ pokemon.details.id }}</h3>
 			<div class="card__types">
-				<p v-for="type in pokemon.details.types" :key="type.type.name">
+				<p
+					v-for="type in pokemon.details.types"
+					:key="type.type.name"
+					:class="type.type.name">
 					{{ type.type.name }}
 				</p>
 			</div>
@@ -56,8 +59,53 @@
 	</article>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	@use "sass:color";
+
+	@mixin background {
+		background-repeat: no-repeat;
+		background-position: 75px -50px, 25% 25%;
+		background-size: auto 150%;
+	}
+
+	.theme--dark {
+		.card {
+			@each $type-primary, $colour-primary in $types {
+				// If there is only one type.
+				&--#{$type-primary} {
+					background: url("/type-icons/#{$type-primary}.svg"),
+						linear-gradient(
+							225deg,
+							color.scale(rgba($colour-primary, 0.8), $lightness: -10%) 25%,
+							color.scale(rgba($colour-primary, 0.8), $lightness: -35%) 60%,
+							color.scale(rgba($colour-primary, 0.8), $lightness: -75%)
+						);
+					@include background;
+
+					.list-item__entry {
+						color: var(--theme-colour);
+					}
+				}
+
+				// If there is more than one type
+				@each $type-secondary, $colour-secondary in $types {
+					&--#{$type-primary}-#{$type-secondary} {
+						background: url("/type-icons/#{$type-primary}.svg"),
+							linear-gradient(
+								225deg,
+								color.scale(rgba($colour-primary, 0.8), $lightness: -10%),
+								color.scale(rgba($colour-secondary, 0.8), $lightness: -50%)
+							);
+						@include background;
+
+						.list-item__entry {
+							color: var(--theme-colour);
+						}
+					}
+				}
+			}
+		}
+	}
 
 	.card {
 		position: relative;
@@ -67,6 +115,8 @@
 		overflow: hidden;
 		cursor: pointer;
 		opacity: 0;
+
+		transition: all 0.3s ease-in-out;
 
 		&.active {
 			animation: fadeIn 450ms linear 1 forwards;
@@ -80,33 +130,6 @@
 			}
 		}
 
-		$types: (
-			"normal": $colour-normal,
-			"fire": $colour-fire,
-			"water": $colour-water,
-			"electric": $colour-electric,
-			"grass": $colour-grass,
-			"ice": $colour-ice,
-			"fighting": $colour-fighting,
-			"poison": $colour-poison,
-			"ground": $colour-ground,
-			"flying": $colour-flying,
-			"psychic": $colour-psychic,
-			"bug": $colour-bug,
-			"rock": $colour-rock,
-			"ghost": $colour-ghost,
-			"dragon": $colour-dragon,
-			"dark": $colour-dark,
-			"steel": $colour-steel,
-			"fairy": $colour-fairy,
-		);
-
-		@mixin background {
-			background-repeat: no-repeat;
-			background-position: 75px -50px, 25% 25%;
-			background-size: auto 150%;
-		}
-
 		@each $type-primary, $colour-primary in $types {
 			// If there is only one type.
 			&--#{$type-primary} {
@@ -118,7 +141,6 @@
 						color.scale($colour-primary, $lightness: -25%)
 					);
 				@include background;
-				transition: all 0.3s ease-in-out;
 
 				.list-item__entry {
 					color: $colour-primary;
@@ -131,7 +153,6 @@
 					background: url("/type-icons/#{$type-primary}.svg"),
 						linear-gradient(225deg, $colour-primary, $colour-secondary);
 					@include background;
-					transition: all 0.3s ease-in-out;
 
 					.list-item__entry {
 						color: $colour-secondary;
@@ -192,7 +213,11 @@
 				font-weight: 500;
 				text-transform: capitalize;
 
-				background: rgba(255, 255, 255, 0.25);
+				@each $type-primary, $colour-primary in $types {
+					&.#{$type-primary} {
+						background: color.scale($colour-primary, $lightness: -20%);
+					}
+				}
 			}
 		}
 
@@ -214,7 +239,7 @@
 
 			z-index: 2;
 
-			transform: scale(1) translateY(-50%);
+			transform: scale(0.9) translateY(-50%);
 			transition: all 0.3s ease-in-out;
 		}
 
@@ -227,15 +252,22 @@
 			height: 100%;
 			width: 100%;
 
-			background: rgba(0, 0, 0, 0.1);
+			background: rgba(0, 0, 0, 0.2);
 			opacity: 0;
 			z-index: -1;
 			transition: opacity 0.3s ease-in-out;
 		}
 
-		&:hover::before {
-			opacity: 1;
-			transition: opacity 0.3s ease-in-out;
+		&:hover {
+			img {
+				transform: scale(1.1) translateY(-50%);
+				transition: all 0.3s;
+			}
+
+			&::before {
+				opacity: 1;
+				transition: opacity 0.3s ease-in-out;
+			}
 		}
 	}
 
@@ -245,7 +277,7 @@
 			transform: translateY(20px);
 		}
 		100% {
-			opacity: 0.75;
+			opacity: 1;
 			transform: translateY(0px);
 		}
 	}

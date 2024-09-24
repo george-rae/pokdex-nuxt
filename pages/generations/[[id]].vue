@@ -9,14 +9,18 @@
 
 	const pokedex = usePokedexStore();
 	const ID = pokedex.getPokedexID;
+	const pokedexLabel = pokedex.getPokedexLabel;
 	const pokemons = pokedex.getPokemon;
+
+	const isString = typeof ID === "string";
 </script>
 
 <template>
 	<main class="pokedex">
 		<header class="pokedex__header">
 			<h1 class="pokedex__title" @click="goTo('index')">
-				{{ ID !== "national" ? `Gen ${ID}` : ID }}
+				{{ pokedexLabel }}
+				<span v-if="!isString">(Gen {{ ID }})</span>
 			</h1>
 			<button
 				type="button"
@@ -65,6 +69,10 @@
 
 			transition: all 0.3s ease-in-out;
 			cursor: pointer;
+
+			span {
+				font-size: clamp($font--body, 0.5em, $font--medium);
+			}
 		}
 
 		&__button {
@@ -197,6 +205,10 @@
 		}
 
 		@media screen and (min-width: 1100px) {
+			&__menu.active {
+				width: 50vw;
+			}
+
 			&__cards {
 				grid-auto-rows: 35vh;
 				grid-template-columns: repeat(3, 1fr);
@@ -204,6 +216,10 @@
 		}
 
 		@media screen and (min-width: 1800px) {
+			&__menu.active {
+				width: 25vw;
+			}
+
 			&__cards {
 				grid-auto-rows: 35vh;
 				grid-template-columns: repeat(4, 1fr);
