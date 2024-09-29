@@ -64,6 +64,22 @@ type Sprites = {
 	versions: SpritesVersion;
 };
 
+interface Moves {
+	name?: string;
+	move: DualLayerGeneric;
+	version_group_details: MoveVersionGroup[];
+}
+
+interface MoveVersionGroup {
+	level_learned_at: number;
+	move_learn_method: DualLayerGeneric;
+	version_group: DualLayerGeneric;
+}
+
+export interface FilteredMoves extends MoveVersionGroup {
+	name: string;
+}
+
 // State Type
 export type PokeState = {
 	ID: number | string;
@@ -125,23 +141,34 @@ export type MinorDetails = {
 	is_legendary: boolean;
 };
 
-export type Pokemon = {
-	id: number;
-	name: string;
-	base_experience: number;
-	height: number;
-	is_default: boolean;
-	order: number;
-	weigth: number;
+export type Cries = {
+	latest: string;
+	legacy: string;
+};
+
+export interface Pokemon {
 	abilities: PokemonGeneric[];
-	forms: PokemonGeneric[];
-	game_indicies: PokemonGeneric[];
+	base_experience: number;
+	cries: Cries;
+	game_indices: PokmeonGeneric[];
+	height: number;
 	held_items: DualLayerGeneric[];
+	id: number;
+	is_default: boolean;
 	location_area_encounters: string;
-	moves: DualLayerGeneric[];
+	moves: FilteredMoves[];
+	name: string;
+	order: number;
+	past_abilities: PokemonGeneric[];
+	past_types: PastTypes[];
 	species: URLName;
 	sprites: Sprites;
 	stats: PokemonGeneric[];
 	types: Types[];
-	past_types: PastTypes[];
-};
+	weight: number;
+}
+
+export interface Details {
+	evolution_chain: any;
+	details: Pokemon;
+}

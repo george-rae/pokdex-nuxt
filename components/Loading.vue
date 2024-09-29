@@ -29,8 +29,8 @@
 		opacity: 0;
 		background: var(--theme-background);
 
-		z-index: 10;
 		pointer-events: none;
+		z-index: 10;
 		transition: opacity 250ms ease-in-out 500ms;
 
 		.pokeball-icon {
@@ -45,6 +45,7 @@
 
 		&.loading {
 			opacity: 1;
+			pointer-events: auto;
 			z-index: 20;
 			transition: opacity 250ms ease-in-out;
 

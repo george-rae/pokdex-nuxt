@@ -9,7 +9,16 @@ export async function fetchData(
 	term: string | number
 ): Promise<any> {
 	const query = await $fetch(`https://pokeapi.co/api/v2/${category}/${term}`);
+	return query;
+}
 
+/**
+ * Lazy function wrapper for fetching a URL returned from previous fetch.
+ *
+ * THIS HOPEFULLY WILL BE REWORKED :COPIUM:
+ */
+export async function fetchDirect(url: string): Promise<any> {
+	const query = await $fetch(url);
 	return query;
 }
 
@@ -25,6 +34,12 @@ export function generateLetters(letters: string) {
 	return [...letters.split("")];
 }
 
+/**
+ * Helper function which wrappers a router.push to helps remove erroneous issues.
+ *
+ * @example <caption>Typical function call for going to a specific pokedex entry</caption>
+ * <Card v-for="(pokemon, index) in pokemons" v-on:click="goTo('pokemon-name', { name: pokemon.pokemon_species.name })" />
+ */
 export function goTo(
 	route: string,
 	params?: { [key: string]: number | string }
@@ -39,4 +54,26 @@ export function goTo(
 
 	loading.value = true;
 	router.push({ name: route, params: params });
+}
+
+/**
+ * Get what the internal API string name for the gen is based of ID value.
+ * @example <caption>Getting the string name for Gen 2</caption>
+ * const genName: string = getGenName(2);
+ * // returns "gold-silver"
+ */
+export function getGenNameFromID(ID: number): string {
+	const gens: { [key: number]: string } = {
+		1: "red-blue",
+		2: "gold-silver",
+		3: "ruby-sapphire",
+		4: "diamond-pearl",
+		5: "black-white",
+		6: "x-y",
+		7: "sun-moon",
+		8: "sword-shield",
+		9: "scarlet-violet",
+	};
+
+	return gens[ID];
 }

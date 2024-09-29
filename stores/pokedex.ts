@@ -1,18 +1,16 @@
-import { defineStore } from "pinia";
 import type { PokeState, PokemonList, MinorDetails } from "@/types/pokemon";
-import { loading } from "@/composables/loading";
 import generations from "~/config/generations";
 
 export const usePokedexStore = defineStore("pokedex", {
 	state: (): PokeState => ({
-		ID: 1,
+		ID: 0,
 		pokemons: [],
 		currentLength: 0,
 		currentMax: 151,
 	}),
 	getters: {
 		getPokedexID: (state) => state.ID,
-		getPokedexLabel: (state) => generations[state.ID].label,
+		getPokedexLabel: (state) => generations[state.ID]?.label,
 		getPokemon: (state) => state.pokemons,
 	},
 	actions: {
@@ -69,9 +67,7 @@ export const usePokedexStore = defineStore("pokedex", {
 
 					return { ...entry, details: details };
 				})
-			)
-				.then((value) => (this.pokemons = value))
-				.finally(() => (loading.value = false));
+			).then((value) => (this.pokemons = value));
 		},
 	},
 });

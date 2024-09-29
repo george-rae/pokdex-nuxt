@@ -11,5 +11,5 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	const pokedex = usePokedexStore();
 	pokedex.changeGen(parsedId);
 
-	await pokedex.fetchPokemon(parsedId);
+	await pokedex.fetchPokemon(parsedId).then(() => (loading.value = false));
 });

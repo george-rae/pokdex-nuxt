@@ -14,16 +14,14 @@
 	const card = ref<Element | null>(null);
 	const active = ref<boolean>(false);
 
-	onMounted(() => {
+	onMounted(async () => {
 		const observer = new IntersectionObserver(
 			(card) => {
 				const { isIntersecting, target } = card[0];
-
 				if (isIntersecting) target.classList.add("active");
 			},
 			{ threshold: 0 }
 		);
-
 		observer.observe(card.value as Element);
 	});
 </script>
@@ -40,20 +38,20 @@
 		<hgroup class="card__info">
 			<h2 class="card__name">{{ pokemon.pokemon_species.name }}</h2>
 			<h3 class="card__id">Region ID: #{{ pokemon.details.id }}</h3>
-			<div class="card__types">
-				<p
-					v-for="type in pokemon.details.types"
-					:key="type.type.name"
-					:class="type.type.name">
-					{{ type.type.name }}
-				</p>
-			</div>
 			<span v-if="pokemon.details.is_legendary" class="card__legendary"
 				>Legendary</span
 			>
 		</hgroup>
+		<div class="card__types">
+			<p
+				v-for="type in pokemon.details.types"
+				:key="type.type.name"
+				:class="type.type.name">
+				{{ type.type.name }}
+			</p>
+		</div>
 		<img
-			:src="pokemon.details.sprite as string"
+			:src="`/pokemon/image--${pokemon.pokemon_species.name}@2x.png`"
 			:alt="`${pokemon.details.id} sprite`" />
 		<span class="card__entry">Entry: #{{ pokemon.entry_number }}</span>
 	</article>
@@ -110,6 +108,7 @@
 	.card {
 		position: relative;
 
+		@include flex-y(space-between);
 		padding: $spacing--l $spacing--m;
 
 		overflow: hidden;
@@ -133,6 +132,7 @@
 		@each $type-primary, $colour-primary in $types {
 			// If there is only one type.
 			&--#{$type-primary} {
+				--card-colour: #{color.scale($colour-primary, $lightness: -25%)};
 				background: url("/type-icons/#{$type-primary}.svg"),
 					linear-gradient(
 						225deg,
@@ -150,6 +150,7 @@
 			// If there is more than one type
 			@each $type-secondary, $colour-secondary in $types {
 				&--#{$type-primary}-#{$type-secondary} {
+					--card-colour: #{color.scale($colour-secondary, $lightness: -25%)};
 					background: url("/type-icons/#{$type-primary}.svg"),
 						linear-gradient(225deg, $colour-primary, $colour-secondary);
 					@include background;
@@ -164,24 +165,28 @@
 		&__info {
 			position: relative;
 
-			@include flex-y(space-between);
-			gap: 10px;
+			display: grid;
+			grid-template: repeat(3, 1fr);
+			gap: $spacing--s;
 			width: 50%;
 
 			z-index: 3;
 		}
 
 		&__name {
-			font-size: 24px;
+			font-size: $font--title;
 			font-weight: 700;
-			color: #fff;
+			color: #e6e6e6;
 			text-transform: capitalize;
+			text-shadow: var(--card-colour) 2px 2px 5px;
 		}
 
 		&__id {
-			font-size: 18px;
+			font-size: $font--body;
 			font-weight: 700;
-			color: #fff;
+			color: #e6e6e6;
+
+			text-shadow: var(--card-colour) 2px 2px 10px;
 		}
 
 		&__entry {
@@ -201,8 +206,7 @@
 
 		&__types {
 			@include flex-x($align: center);
-			gap: 5px;
-			margin-top: 25px;
+			gap: $spacing--xs;
 
 			p {
 				padding: 5px 10px;
@@ -222,7 +226,7 @@
 		}
 
 		&__legendary {
-			font-size: 22px;
+			font-size: $font--body;
 			font-weight: 700;
 			color: #fff;
 
@@ -234,7 +238,7 @@
 			top: 50%;
 			right: 16px;
 
-			height: 100%;
+			height: 90%;
 			width: auto;
 
 			z-index: 2;
@@ -260,7 +264,7 @@
 
 		&:hover {
 			img {
-				transform: scale(1.1) translateY(-50%);
+				transform: scale(1) translateY(-50%);
 				transition: all 0.3s;
 			}
 

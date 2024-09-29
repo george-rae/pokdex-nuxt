@@ -45,8 +45,11 @@
 			<Card
 				v-for="(pokemon, index) in pokemons"
 				:pokemon="pokemon"
-				:class="{ active: index < 12 }"
-				:key="index" />
+				:class="{
+					active: index < 12,
+				}"
+				:key="index"
+				@click="goTo('pokemon-name', { name: pokemon.pokemon_species.name })" />
 		</section>
 	</main>
 </template>
@@ -210,7 +213,7 @@
 			}
 
 			&__cards {
-				grid-auto-rows: 35vh;
+				grid-auto-rows: 40vh;
 				grid-template-columns: repeat(3, 1fr);
 			}
 		}
@@ -221,7 +224,6 @@
 			}
 
 			&__cards {
-				grid-auto-rows: 35vh;
 				grid-template-columns: repeat(4, 1fr);
 			}
 		}
