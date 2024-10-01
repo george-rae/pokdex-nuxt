@@ -47,21 +47,25 @@
 }
 
 @mixin flex-x($justify: false, $align: false, $wrap: false) {
-	display: flex;
-	@if $justify {
-		justify-content: $justify;
-	}
-	@if $align {
-		align-items: $align;
-	}
-	@if $wrap {
-		flex-wrap: $wrap;
+	& {
+		display: flex;
+		@if $justify {
+			justify-content: $justify;
+		}
+		@if $align {
+			align-items: $align;
+		}
+		@if $wrap {
+			flex-wrap: $wrap;
+		}
 	}
 }
 
 @mixin flex-y($justify: false, $align: false, $wrap: false) {
-	@include flex-x($justify, $align, $wrap);
-	flex-direction: column;
+	& {
+		flex-direction: column;
+		@include flex-x($justify, $align, $wrap);
+	}
 }
 
 @mixin absolute-fill() {

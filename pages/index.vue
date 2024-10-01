@@ -28,10 +28,11 @@
 
 <style lang="scss">
 	.generations {
-		@include flex-y;
 		gap: $spacing--l;
 		min-height: 100vh;
 		padding: $spacing--xl $spacing--m;
+
+		@include flex-y;
 
 		&__header {
 			color: transparent;
@@ -45,15 +46,14 @@
 		}
 
 		&__list {
-			@include flex-x(center, center, wrap);
 			gap: $spacing--m;
+			@include flex-x(center, center, wrap);
 		}
 
 		&__item {
 			position: relative;
 
 			flex: 0 0 100%;
-			@include flex-y($align: center);
 			height: clamp(150px, 25vh, 220px);
 			padding: $spacing--m;
 
@@ -66,6 +66,8 @@
 			cursor: pointer;
 			animation: fadeIn 500ms linear 1 forwards;
 			transition: all 0.3s ease-in-out;
+
+			@include flex-y($align: center);
 
 			img {
 				width: 90%;
@@ -117,8 +119,9 @@
 		}
 
 		@media screen and (min-width: 900px) {
-			@include flex-y(center, center);
 			gap: $spacing--xl;
+			@include flex-y(center, center);
+
 			&__item {
 				flex-basis: calc(33% - 18px);
 

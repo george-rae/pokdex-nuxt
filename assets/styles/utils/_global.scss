@@ -8,6 +8,7 @@
 	&--light {
 		--theme-background: linear-gradient(to bottom right, #e6e6e6, #fff);
 		--theme-colour: #333;
+		--theme-colour-washout: #999;
 		--theme-box-shadow: #{rgba(#333, 0.3)};
 		--theme-gradient-text: linear-gradient(to right, #333, #000);
 
@@ -17,6 +18,7 @@
 	&--dark {
 		--theme-background: linear-gradient(to bottom right, #333, #000);
 		--theme-colour: #f2f2f2;
+		--theme-colour-washout: #e6e6e6;
 		--theme-box-shadow: #{rgba(#e6e6e6, 0.2)};
 		--theme-gradient-text: linear-gradient(to right, #e6e6e6, #fff);
 

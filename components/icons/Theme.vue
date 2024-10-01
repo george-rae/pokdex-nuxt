@@ -6,8 +6,14 @@
 
 <template>
 	<div class="theme-change" @click="$emit('theme-change')">
-		<img src="/light.svg" :class="{ hidden: theme.dark }" alt="light theme" />
-		<img src="/dark.svg" :class="{ hidden: !theme.dark }" alt="dark theme" />
+		<img
+			src="https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/theme--light.svg"
+			:class="{ hidden: theme.dark }"
+			alt="light theme" />
+		<img
+			src="https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/theme--dark.svg"
+			:class="{ hidden: !theme.dark }"
+			alt="dark theme" />
 	</div>
 </template>
 

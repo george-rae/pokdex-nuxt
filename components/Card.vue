@@ -51,7 +51,7 @@
 			</p>
 		</div>
 		<img
-			:src="`/pokemon/image--${pokemon.pokemon_species.name}@2x.png`"
+			:src="`https://pokedex-images.lon1.cdn.digitaloceanspaces.com/pokemon/image--${pokemon.pokemon_species.name}@2x.png`"
 			:alt="`${pokemon.details.id} sprite`" />
 		<span class="card__entry">Entry: #{{ pokemon.entry_number }}</span>
 	</article>
@@ -71,9 +71,9 @@
 			@each $type-primary, $colour-primary in $types {
 				// If there is only one type.
 				&--#{$type-primary} {
-					background: url("/type-icons/#{$type-primary}.svg"),
+					background: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg"),
 						linear-gradient(
-							225deg,
+							to left,
 							color.scale(rgba($colour-primary, 0.8), $lightness: -10%) 25%,
 							color.scale(rgba($colour-primary, 0.8), $lightness: -35%) 60%,
 							color.scale(rgba($colour-primary, 0.8), $lightness: -75%)
@@ -90,7 +90,7 @@
 					&--#{$type-primary}-#{$type-secondary} {
 						background: url("/type-icons/#{$type-primary}.svg"),
 							linear-gradient(
-								225deg,
+								to left,
 								color.scale(rgba($colour-primary, 0.8), $lightness: -10%),
 								color.scale(rgba($colour-secondary, 0.8), $lightness: -50%)
 							);
@@ -108,7 +108,6 @@
 	.card {
 		position: relative;
 
-		@include flex-y(space-between);
 		padding: $spacing--l $spacing--m;
 
 		overflow: hidden;
@@ -116,6 +115,8 @@
 		opacity: 0;
 
 		transition: all 0.3s ease-in-out;
+
+		@include flex-y(space-between);
 
 		&.active {
 			animation: fadeIn 450ms linear 1 forwards;
@@ -133,7 +134,7 @@
 			// If there is only one type.
 			&--#{$type-primary} {
 				--card-colour: #{color.scale($colour-primary, $lightness: -25%)};
-				background: url("/type-icons/#{$type-primary}.svg"),
+				background: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg"),
 					linear-gradient(
 						225deg,
 						color.scale($colour-primary, $lightness: 10%) 25%,
@@ -151,7 +152,7 @@
 			@each $type-secondary, $colour-secondary in $types {
 				&--#{$type-primary}-#{$type-secondary} {
 					--card-colour: #{color.scale($colour-secondary, $lightness: -25%)};
-					background: url("/type-icons/#{$type-primary}.svg"),
+					background: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg"),
 						linear-gradient(225deg, $colour-primary, $colour-secondary);
 					@include background;
 
@@ -205,8 +206,8 @@
 		}
 
 		&__types {
-			@include flex-x($align: center);
 			gap: $spacing--xs;
+			@include flex-x($align: center);
 
 			p {
 				padding: 5px 10px;

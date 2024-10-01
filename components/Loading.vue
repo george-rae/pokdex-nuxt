@@ -21,7 +21,6 @@
 		position: fixed;
 		inset: 0;
 
-		@include flex-y(center, center);
 		gap: 20px;
 		height: 100%;
 		width: 100%;
@@ -32,6 +31,8 @@
 		pointer-events: none;
 		z-index: 10;
 		transition: opacity 250ms ease-in-out 500ms;
+
+		@include flex-y(center, center);
 
 		.pokeball-icon {
 			position: relative;
