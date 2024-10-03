@@ -3,12 +3,17 @@ import type {
 	FilteredMoves,
 	Moves,
 	MoveVersionGroup,
+	Ability,
+	LangVerGeneric,
+	PokemonGeneric,
 } from "~/types/pokemon";
 import { fetchData } from "@/utils/helpers";
 
 export const useDetailsStore = defineStore("details", {
 	state: (): Details => ({
 		evolution_chain: "",
+		description: "",
+		genus: "",
 		details: {
 			abilities: [],
 			base_experience: 0,
@@ -62,40 +67,47 @@ export const useDetailsStore = defineStore("details", {
 			// need to get the species first as some pokemon returned from `pokedex` call
 			// do not match their name in the API calls for /pokemon/{name}...
 			const species = await fetchData("pokemon-species", name).then((value) => {
+				const { flavor_text_entries, genera, varieties, evolution_chain } =
+					value;
+
 				return {
-					name: value.varieties[0].pokemon.name,
-					evolution_chain: value.evolution_chain.url,
+					name: varieties[0].pokemon.name,
+					description: getEnFlavourText(flavor_text_entries, "flavor_text"),
+					species: getEnFlavourText(genera, "genus"),
+					evolution_chain: evolution_chain.url,
 				};
 			});
 
+			this.description = species.description;
+			this.genus = species.species;
+
+			this.evolution_chain = await fetchDirect(species.evolution_chain);
+
 			const APIName: string = species.name;
-			this.evolution_chain = await fetchDirect(species.evolution_chain).then(
-				(evoChain) => {
-					const evolution_chain: any[] = [];
-					const { chain } = evoChain;
-
-					if (chain.evolves_to.length > 0) {
-						console.log(chain.evolves_to);
-						chain.evolves_to.map((evo1: any) => {
-							console.log(evo1);
-
-							evolution_chain.push({
-								name: evo1.species.name,
-								details: evo1.evolution_details,
-							});
-						});
-					}
-
-					return evolution_chain;
-				}
-			);
-
 			const PokeDexID = pokedexStore.ID;
-			// const PokeDexID = 1;
 			const genName = getGenNameFromID(PokeDexID as number);
 
 			await fetchData("pokemon", APIName)
-				.then((details) => {
+				.then(async (details) => {
+					let abilitiesList: PokemonGeneric[] = [];
+
+					await Promise.all(
+						details.abilities.map(async (ability: Ability) => {
+							const abilityInfo = await fetchDirect(ability.ability.url);
+							const { names, effect_entries } = abilityInfo;
+							const name = getEnFlavourText(names, "name");
+							const effect = getEnFlavourText(effect_entries, "short_effect");
+
+							const details = { name: name, effect: effect };
+
+							return details;
+						})
+					).then((value) => {
+						value.forEach((value) => abilitiesList.push(value));
+
+						details.abilities = abilitiesList;
+					});
+
 					let movesList: FilteredMoves[] = [];
 					details.moves.forEach((move: Moves) => {
 						// Group each move version by name

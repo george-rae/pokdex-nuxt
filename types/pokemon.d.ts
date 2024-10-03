@@ -80,6 +80,12 @@ export interface FilteredMoves extends MoveVersionGroup {
 	name: string;
 }
 
+export type Ability = {
+	is_hidden: boolean;
+	slot: number;
+	ability: NameURL;
+};
+
 // State Type
 export type PokeState = {
 	ID: number | string;
@@ -168,7 +174,18 @@ export interface Pokemon {
 	weight: number;
 }
 
+interface LangVer {
+	language: NameURL;
+	version: NameURL;
+}
+
+export interface LangVerGeneric extends LangVer {
+	[key: string]: string;
+}
+
 export interface Details {
 	evolution_chain: any;
+	description: string;
+	genus: string;
 	details: Pokemon;
 }

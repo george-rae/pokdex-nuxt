@@ -42,7 +42,8 @@ export function generateLetters(letters: string) {
  */
 export function goTo(
 	route: string,
-	params?: { [key: string]: number | string }
+	params?: { [key: string]: number | string },
+	resetId?: boolean
 ) {
 	const router = useRouter();
 	const { currentRoute } = router;
@@ -53,7 +54,15 @@ export function goTo(
 	if (isCurrentRoute) return;
 
 	loading.value = true;
+	if (resetId) usePokedexStore().$reset;
 	router.push({ name: route, params: params });
+}
+
+export function goBack() {
+	const router = useRouter();
+
+	loading.value = true;
+	router.back();
 }
 
 /**

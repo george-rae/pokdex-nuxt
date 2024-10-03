@@ -33,6 +33,7 @@
 		width: auto;
 
 		z-index: 0;
+		opacity: 0.1;
 
 		animation: spin 20s linear infinite forwards;
 	}

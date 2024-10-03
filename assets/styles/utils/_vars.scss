@@ -5,43 +5,6 @@
 
 // FUNCTIONS/MIXINS
 
-@function values($val) {
-	$top: 0;
-	$right: 0;
-	$bottom: 0;
-	$left: 0;
-
-	@if length($val) > 0 {
-		$all: nth($val, 1);
-		$top: $all;
-		$right: $all;
-		$bottom: $all;
-		$left: $all;
-	}
-	@if length($val) > 1 {
-		$left: nth($val, 2);
-		$right: nth($val, 2);
-	}
-	@if length($val) > 2 {
-		$bottom: nth($val, 3);
-	}
-	@if length($val) > 3 {
-		$left: nth($val, 4);
-	}
-
-	@return (top: $top, right: $right, bottom: $bottom, left: $left);
-}
-
-@mixin position($positions...) {
-	$positions: values($positions);
-
-	position: absolute;
-	top: map-get($positions, "top");
-	right: map-get($positions, "right");
-	bottom: map-get($positions, "bottom");
-	left: map-get($positions, "left");
-}
-
 @function tint($colour, $percentage) {
 	@return mix($colour, #fff, $percentage);
 }
