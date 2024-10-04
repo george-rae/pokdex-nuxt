@@ -80,7 +80,7 @@ $header-padding: $spacing;
 $font--body: 16px;
 $font--medium: 18px;
 $font--heading: 24px;
-$font--title: clamp($font--heading, 7vw, $font--heading * 2);
+$font--title: clamp($font--heading, 6.5vw, $font--heading * 2);
 
 // VARIABLES
 $types: (

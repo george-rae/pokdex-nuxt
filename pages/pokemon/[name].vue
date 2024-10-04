@@ -29,11 +29,11 @@
 
 <template>
 	<main class="pokemon" :class="`pokemon--${type}`">
+		<header class="pokemon__heading">
+			<Return @pointerup="goBack()" />
+			<Menu :white="true" />
+		</header>
 		<section class="pokemon__main" :class="`pokemon__main--${type}`">
-			<header class="pokemon__heading">
-				<Return @pointerup="goBack()" />
-				<Menu :white="true" />
-			</header>
 			<div class="pokemon__info">
 				<hgroup>
 					<h1 class="pokemon__name">{{ details.name }}</h1>
@@ -73,23 +73,31 @@
 
 		<Tabs :info="store" :details="details" />
 	</main>
+	<img
+		class="background-pokeball"
+		src="https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/pokeball--loading.svg"
+		alt="Pokeball icon" />
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	@use "sass:color";
 
-	@mixin background {
+	body > div {
+		min-height: 100vh;
+
+		@include flex-y(center, center);
+	}
+
+	@mixin background($direction: to left) {
 		@each $type-primary, $colour-primary in $types {
 			// If there is only one type.
 			&--#{$type-primary} {
 				.pokemon__main {
-					background: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg");
-					background-position: -100% 0%;
-					background-size: 110%;
+					background-image: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg");
 				}
 
 				--background: #{linear-gradient(
-						to left,
+						$direction,
 						color.scale(rgba($colour-primary, 0.8), $lightness: -10%) 25%,
 						color.scale(rgba($colour-primary, 0.8), $lightness: -35%) 60%,
 						color.scale(rgba($colour-primary, 0.8), $lightness: -75%)
@@ -100,13 +108,11 @@
 			@each $type-secondary, $colour-secondary in $types {
 				&--#{$type-primary}-#{$type-secondary} {
 					.pokemon__main {
-						background: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg");
-						background-position: -100% 0%;
-						background-size: 110%;
+						background-image: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg");
 					}
 
 					--background: #{linear-gradient(
-							to left,
+							$direction,
 							color.scale(rgba($colour-primary, 0.8), $lightness: -10%),
 							color.scale(rgba($colour-secondary, 0.8), $lightness: -50%)
 						)};
@@ -129,11 +135,16 @@
 			padding: $spacing $spacing 0;
 			z-index: 2;
 
+			background-position: -100% 0%;
+			background-size: 110%;
+			background-repeat: no-repeat;
+
 			@include flex-y;
 		}
 
 		&__heading {
 			height: max-content;
+			padding: $spacing;
 
 			color: var(--theme-colour);
 			font-weight: 700;
@@ -212,8 +223,56 @@
 		}
 
 		&__image {
-			width: 60%;
+			width: clamp(250px, 60%, 350px);
 			margin: 0 auto -#{$spacing--xl};
+		}
+
+		@media screen and (min-width: 700px) {
+			&__image {
+				margin: -#{$spacing--xl * 3} auto -#{$spacing--xl};
+			}
+		}
+
+		@media screen and (min-width: 1024px) {
+			flex-direction: row;
+			width: clamp(1024px, 100%, 1280px);
+			height: clamp(700px, 100vh - ($spacing * 3), 850px);
+			min-height: 0;
+
+			border-radius: $spacing;
+			box-shadow: 2px 2px 10px 5px rgba(66, 66, 66, 0.1);
+			overflow: hidden;
+
+			@include background(to bottom);
+
+			&__heading {
+				position: absolute;
+				left: 0;
+				right: 0;
+
+				z-index: 10;
+
+				.menu__button.white {
+					color: var(--theme-colour);
+				}
+			}
+
+			&__main {
+				flex: 0 0 clamp(400px, 40%, 550px);
+				gap: $spacing--l * 2;
+				padding: $spacing--l * 2 $spacing--l $spacing--l;
+
+				background-position: left 350px;
+				background-size: 150%;
+			}
+
+			&__image {
+				width: clamp(300px, 100%, 450px);
+				margin: 0 auto;
+			}
+		}
+
+		@media screen and (min-width: 1800px) {
 		}
 	}
 </style>

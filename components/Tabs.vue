@@ -207,8 +207,10 @@
 			@include flex-y;
 
 			&-content {
+				--first-col: #{$spacing--m * 6};
+
 				display: grid;
-				grid-template-columns: 33% 1fr;
+				grid-template-columns: var(--first-col) 1fr;
 
 				h3 {
 					padding-right: $spacing--s;
@@ -242,7 +244,7 @@
 			gap: $spacing;
 
 			& > .pokemon__section-content {
-				grid-template-columns: 33% $spacing--l 1fr;
+				grid-template-columns: var(--first-col) $spacing--l 1fr;
 				align-items: center;
 
 				p {
@@ -364,6 +366,25 @@
 			& + & {
 				padding-top: $spacing--s;
 			}
+		}
+
+		@media screen and (min-width: 1024px) {
+			&__tabs {
+				padding: $spacing--l * 2 $spacing--l $spacing--l;
+
+				border-radius: 0;
+			}
+
+			&__section {
+				gap: $spacing;
+			}
+
+			&__evolution {
+				width: 75%;
+			}
+		}
+
+		@media screen and (min-width: 1800px) {
 		}
 	}
 </style>

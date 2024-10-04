@@ -36,6 +36,7 @@
 <style lang="scss" scoped>
 	.pokedex {
 		height: 100vh;
+		width: 100%;
 		overflow: hidden;
 
 		@include flex-y;
@@ -71,7 +72,7 @@
 			}
 		}
 
-		@media screen and (min-width: 1100px) {
+		@media screen and (min-width: 1024px) {
 			&__cards {
 				grid-auto-rows: 40vh;
 				grid-template-columns: repeat(3, 1fr);
