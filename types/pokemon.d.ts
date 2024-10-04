@@ -64,20 +64,27 @@ type Sprites = {
 	versions: SpritesVersion;
 };
 
-interface Moves {
-	name?: string;
-	move: DualLayerGeneric;
-	version_group_details: MoveVersionGroup[];
-}
-
 interface MoveVersionGroup {
 	level_learned_at: number;
 	move_learn_method: DualLayerGeneric;
 	version_group: DualLayerGeneric;
 }
 
-export interface FilteredMoves extends MoveVersionGroup {
+interface Moves {
+	name?: string;
+	move: DualLayerGeneric;
+	version_group_details: MoveVersionGroup[];
+}
+
+export interface FilteredMoves {
 	name: string;
+	accuracy: number | "Unmissable";
+	power: number | "0 (Status effect)";
+	pp: number;
+	class: string;
+	effect: string;
+	type: string;
+	target: string;
 }
 
 export type Ability = {

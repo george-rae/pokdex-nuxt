@@ -22,3 +22,10 @@ export const useItem: { [key: string]: string } = {
 	"ice-stone": "Ice Stone",
 	"dawn-stone": "Dawn Stone",
 };
+
+export const targetMap: { [key: string]: string } = {
+	"selected-pokemon": "Selected Pokemon",
+	"entire-field": "Entire Field",
+	"all-opponents": "All Opponents",
+	user: "Self",
+};

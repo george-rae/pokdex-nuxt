@@ -1,15 +1,22 @@
-import type { LangVerGeneric, PokemonGeneric, Pokemon } from "~/types/pokemon";
+import type {
+	LangVerGeneric,
+	PokemonGeneric,
+	Pokemon,
+	Moves,
+} from "~/types/pokemon";
 import { useItem } from "~/config/constants";
 
 export function getEnFlavourText(
 	arr: any[],
 	returnVal: string = "flavor_text"
 ) {
-	const string = arr.filter(
-		(value: LangVerGeneric) => value.language.name === "en"
-	)[0][returnVal];
+	if (arr.length > 0) {
+		const string = arr.filter(
+			(value: LangVerGeneric) => value.language.name === "en"
+		)[0][returnVal];
 
-	return string.replace("", " ");
+		return string.replace("", " ");
+	} else return null;
 }
 
 export async function getFilteredAbilities(details: Pokemon) {
@@ -51,4 +58,19 @@ export function getLevelUpRequirements(details: any) {
 	}
 
 	return req;
+}
+
+export function getMoveLearnRequirements(method: string, level?: number) {
+	switch (method) {
+		case "level-up":
+			return `Pokémon reaches level ${level}`;
+		case "egg":
+			return "Appears on a newly-hatched Pokémon, if the father had the same move";
+		case "tutor":
+			return "Can be taught at any time by an NPC";
+		case "machine":
+			return "Can be taught at any time by using a TM or HM";
+		default:
+			return "Method unknown";
+	}
 }

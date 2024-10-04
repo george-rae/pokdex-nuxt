@@ -8,10 +8,10 @@
 		info: { type: Object as PropType<Details>, required: true },
 	});
 
+	console.log(props.details);
+
 	const tabs = ["details", "stats", "evolution", "moves"];
 	const tabActive: Ref<string> = ref("details");
-
-	console.log(props.info.evolution_chain);
 
 	function toggleTabs(tabName: string) {
 		tabActive.value = tabName;
@@ -123,11 +123,19 @@
 				</p>
 			</article>
 			<article
-				class="pokemon__section"
+				class="pokemon__section pokemon__moves"
 				:class="{ active: tabActive === 'moves' }">
-				<p class="pokemon__moves" v-for="move in details.moves">
-					{{ move }}
-				</p>
+				<section class="pokemon__move" v-for="move in details.moves">
+					<h2 class="pokemon__move-name">{{ move.name }}</h2>
+					<hgroup
+						class="pokemon__section-content"
+						v-for="info in Object.entries(move).filter(
+							(entry) => entry[0] !== 'name'
+						)">
+						<h3 :class="`key key--${info[0]}`">{{ info[0] }}</h3>
+						<p :class="`value value--${info[0]}`">{{ info[1] }}</p>
+					</hgroup>
+				</section>
 			</article>
 		</div>
 	</section>
@@ -328,6 +336,34 @@
 			font-weight: 500;
 			color: var(--theme-colour-washout);
 			text-align: center;
+		}
+
+		&__move {
+			gap: $spacing--s;
+
+			@include flex-y;
+
+			&-name {
+				padding-bottom: $spacing--s;
+
+				font-size: $font--medium;
+				font-weight: 700;
+				color: var(--theme-colour);
+			}
+
+			.key,
+			.value--class,
+			.value--type {
+				text-transform: capitalize;
+
+				&--pp {
+					text-transform: uppercase;
+				}
+			}
+
+			& + & {
+				padding-top: $spacing--s;
+			}
 		}
 	}
 </style>

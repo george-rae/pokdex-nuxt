@@ -4,10 +4,10 @@ import type {
 	Moves,
 	MoveVersionGroup,
 	Ability,
-	LangVerGeneric,
 	PokemonGeneric,
 } from "~/types/pokemon";
 import { fetchData } from "@/utils/helpers";
+import { targetMap } from "~/config/constants";
 
 export const useDetailsStore = defineStore("details", {
 	state: (): Details => ({
@@ -85,7 +85,7 @@ export const useDetailsStore = defineStore("details", {
 
 			const APIName: string = species.name;
 			const PokeDexID = pokedexStore.ID;
-			const genName = getGenNameFromID(PokeDexID as number);
+			const genName = getGenNameFromID(PokeDexID as number) ?? null;
 
 			await fetchData("pokemon", APIName)
 				.then(async (details) => {
@@ -109,25 +109,53 @@ export const useDetailsStore = defineStore("details", {
 					});
 
 					let movesList: FilteredMoves[] = [];
-					details.moves.forEach((move: Moves) => {
-						// Group each move version by name
-						const moveGroups = Object.groupBy(
-							move.version_group_details,
-							(obj: MoveVersionGroup) => obj.version_group.name
-						);
+					await Promise.all(
+						details.moves.map(async (move: Moves) => {
+							// Group each move version by name
+							const moveGroups = Object.groupBy(
+								move.version_group_details,
+								(obj: MoveVersionGroup) => obj.version_group.name
+							);
 
-						if (PokeDexID != 0) {
-							const matchMoveToGen = moveGroups[genName];
-							if (matchMoveToGen)
-								movesList.push({ name: move.move.name, ...matchMoveToGen[0] });
-						} else {
-							const getFirst = Object.values(moveGroups)[0];
-							if (getFirst)
-								movesList.push({ name: move.move.name, ...getFirst[0] });
-						}
+							async function retMoveInfo(vg: MoveVersionGroup) {
+								const info = await fetchDirect(move.move.url);
+
+								return {
+									name: getEnFlavourText(info.names, "name"),
+									effect:
+										getEnFlavourText(info.effect_entries, "short_effect") ??
+										"No description provided",
+									accuracy: info.accuracy ?? "Unmissable",
+									target: targetMap[info.target.name] ?? "unknown",
+									power: info.power ?? "0 (Status effect)",
+									class: info.damage_class.name ?? "none",
+									pp: info.pp,
+									type: info.type.name,
+									"learn method": getMoveLearnRequirements(
+										vg.move_learn_method.name,
+										vg.level_learned_at
+									),
+								};
+							}
+
+							let thisMove;
+							if (!PokeDexID && PokeDexID != 0) {
+								const matchMoveToGen = moveGroups[genName];
+								if (matchMoveToGen) thisMove = retMoveInfo(matchMoveToGen[0]);
+							} else {
+								const getFirst = Object.values(moveGroups)[0];
+								if (getFirst) thisMove = retMoveInfo(getFirst[0]);
+							}
+
+							return thisMove;
+						})
+					).then((value) => {
+						value.forEach((value) => {
+							if (value) movesList.push(value);
+						});
+
+						details.moves = movesList;
 					});
-
-					details.moves = movesList;
 
 					return details;
 				})

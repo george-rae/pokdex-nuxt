@@ -15,9 +15,15 @@
 			: details.value.types[0].type.name;
 
 	function playCry() {
-		const cry = new Audio(details.value.cries.latest);
-		cry.volume = 0.25;
-		cry.play();
+		try {
+			const cry = new Audio(details.value.cries.latest);
+			cry.volume = 0.25;
+
+			cry.load();
+			cry.play();
+		} catch (e) {
+			window.alert(JSON.stringify(e, ["message", "arguments", "type", "name"]));
+		}
 	}
 </script>
 
@@ -25,7 +31,7 @@
 	<main class="pokemon" :class="`pokemon--${type}`">
 		<section class="pokemon__main" :class="`pokemon__main--${type}`">
 			<header class="pokemon__heading">
-				<Return @click="goBack()" />
+				<Return @pointerup="goBack()" />
 				<Menu :white="true" />
 			</header>
 			<div class="pokemon__info">
@@ -44,7 +50,8 @@
 
 				<div class="pokemon__minor">
 					<p class="pokemon__id">#{{ details.id }}</p>
-					<button type="button" class="pokemon__cry" @click="playCry()">
+					<button type="button" class="pokemon__cry" @pointerup="playCry()">
+						<p>Cry</p>
 						<svg
 							id="play-button"
 							xmlns="http://www.w3.org/2000/svg"
@@ -181,18 +188,25 @@
 		}
 
 		&__cry {
-			height: $spacing--l;
-			width: $spacing--l;
+			gap: $spacing--xs;
+			width: $spacing;
 
 			background: transparent;
 			border: 0;
 
 			cursor: pointer;
+			z-index: 20;
 
-			@include flex-x(center, center);
+			@include flex-y(center, center);
+
+			p {
+				font-size: $font--body;
+				font-weight: 700;
+				color: #fff;
+			}
 
 			svg {
-				height: 100%;
+				height: $spacing--s;
 				width: auto;
 			}
 		}
