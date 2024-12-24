@@ -9,18 +9,19 @@
 	const pokemons = pokedex.getPokemon;
 
 	const isString = typeof ID === "string";
+
+	provide("genPokemon", pokemons);
 </script>
 
 <template>
 	<main class="pokedex">
-		<header class="pokedex__header">
-			<h1 class="pokedex__title" @click="goTo('index')">
+		<Navigation>
+			<h1 class="title" @click="goTo('index')">
 				{{ pokedexLabel }}
 				<span v-if="!isString">(Gen {{ ID }})</span>
 			</h1>
-			<Menu />
-		</header>
-		<section class="pokedex__cards">
+		</Navigation>
+		<section class="cards">
 			<Card
 				v-for="(pokemon, index) in pokemons"
 				:pokemon="pokemon"
@@ -34,55 +35,69 @@
 </template>
 
 <style lang="scss" scoped>
+	.navigation {
+		span {
+			font-size: clamp($font--body, 0.5em, $font--medium);
+		}
+	}
+
 	.pokedex {
 		height: 100vh;
 		width: 100%;
 		overflow: hidden;
 
 		@include flex-y;
+	}
 
-		&__header {
-			height: max-content;
-			padding: $header-padding;
+	.cards {
+		display: grid;
+		grid-auto-rows: 25vh;
+		overflow: auto;
+	}
 
-			font-size: $font--title;
-			font-weight: 700;
-			text-transform: capitalize;
-			color: var(--theme-colour);
-
-			transition: all 0.3s ease-in-out;
-			cursor: pointer;
-
-			@include flex-x(space-between, center);
-
-			span {
-				font-size: clamp($font--body, 0.5em, $font--medium);
-			}
+	@media screen and (min-width: 700px) {
+		.cards {
+			grid-template-columns: repeat(2, 1fr);
 		}
+	}
 
-		&__cards {
+	@media screen and (min-width: 1024px) {
+		.cards {
+			grid-auto-rows: 40vh;
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media screen and (min-width: 1400px) {
+		.pokedex {
 			display: grid;
-			grid-auto-rows: 25vh;
-			overflow: auto;
+			grid-template-columns: 70vw 30vw;
 		}
 
-		@media screen and (min-width: 700px) {
-			&__cards {
-				grid-template-columns: repeat(2, 1fr);
-			}
+		.cards {
+			grid-auto-rows: 30vh;
+			order: 1;
 		}
 
-		@media screen and (min-width: 1024px) {
-			&__cards {
-				grid-auto-rows: 40vh;
-				grid-template-columns: repeat(3, 1fr);
-			}
+		.navigation {
+			order: 2;
+		}
+	}
+
+	@media screen and (min-width: 1800px) {
+		.cards {
+			grid-auto-rows: 40vh;
+		}
+	}
+
+	@media screen and (min-width: 1920px) {
+		.pokedex {
+			grid-template-columns: 80vw 20vw;
 		}
 
-		@media screen and (min-width: 1800px) {
-			&__cards {
-				grid-template-columns: repeat(4, 1fr);
-			}
+		.cards {
+			grid-template-columns: repeat(4, 1fr);
+			grid-auto-rows: 35vh;
 		}
 	}
 </style>

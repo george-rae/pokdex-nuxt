@@ -88,7 +88,7 @@
 				// If there is more than one type
 				@each $type-secondary, $colour-secondary in $types {
 					&--#{$type-primary}-#{$type-secondary} {
-						background: url("/type-icons/#{$type-primary}.svg"),
+						background: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg"),
 							linear-gradient(
 								to left,
 								color.scale(rgba($colour-primary, 0.8), $lightness: -10%),
@@ -208,6 +208,7 @@
 		&__types {
 			gap: $spacing--xs;
 			@include flex-x($align: center);
+			z-index: 10;
 
 			p {
 				padding: 5px 10px;

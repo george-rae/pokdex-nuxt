@@ -62,7 +62,9 @@ export function goBack() {
 	const router = useRouter();
 
 	loading.value = true;
-	router.back();
+
+	if (history.state.back === null) router.push({ name: "index" });
+	else router.back();
 }
 
 /**

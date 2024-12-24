@@ -28,7 +28,7 @@
 
 <style lang="scss">
 	.generations {
-		gap: $spacing--l;
+		gap: $spacing--m;
 		min-height: 100vh;
 		padding: $spacing--xl $spacing--m;
 
@@ -119,8 +119,8 @@
 		}
 
 		@media screen and (min-width: 900px) {
-			gap: $spacing--xl;
-			@include flex-y(center, center);
+			justify-content: center;
+			align-items: center;
 
 			&__item {
 				flex-basis: calc(33% - 18px);

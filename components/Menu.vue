@@ -11,164 +11,195 @@
 <template>
 	<button
 		type="button"
-		class="menu__button"
+		v-if="!isDesktop"
 		:class="{ active: menuOpen, white: white }"
 		@click="menuOpen = !menuOpen">
 		<span class="bun bun--top"></span>
 		<span class="bun bun--bottom"></span>
 	</button>
-	<nav class="menu__container" :class="{ active: menuOpen }">
-		<ul class="menu__list">
+	<div class="container" :class="{ active: menuOpen }">
+		<Search />
+		<ul>
+			<h3 class="generations-list">Generations:</h3>
 			<li
-				class="menu__list-item"
 				v-for="(generation, key) in generations"
 				@click="goTo('generations-id', { id: key })">
 				{{ generation.label }}
 			</li>
 		</ul>
-	</nav>
+	</div>
 </template>
 
 <style lang="scss" scoped>
-	.menu {
-		&__button {
-			position: relative;
+	button {
+		position: relative;
 
-			height: $spacing--m;
-			width: $spacing--l;
-			padding: 0;
+		height: $spacing--m;
+		width: $spacing--l;
+		padding: 0;
 
-			color: var(--theme-colour);
+		color: var(--theme-colour);
 
-			background: transparent;
-			border: 0;
+		background: transparent;
+		border: 0;
 
-			cursor: pointer;
-			z-index: 10;
+		cursor: pointer;
+		z-index: 10;
 
-			@include flex-y($align: flex-end);
+		@include flex-y($align: flex-end);
 
+		.bun {
+			position: absolute;
+			top: 0;
+
+			width: 100%;
+			max-width: $spacing--l;
+			height: $spacing--xs;
+
+			background: currentColor;
+			border-radius: $spacing--xs;
+
+			transition: all 0.3s ease-out;
+
+			&--bottom {
+				top: calc(100% - $spacing--xs);
+
+				max-width: $spacing--m;
+			}
+		}
+
+		&.active {
 			.bun {
-				position: absolute;
-				top: 0;
-
-				width: 100%;
+				top: 9px;
 				max-width: $spacing--l;
-				height: $spacing--xs;
-
-				background: currentColor;
-				border-radius: $spacing--xs;
 
 				transition: all 0.3s ease-out;
+				transform: rotateZ(-45deg);
 
 				&--bottom {
-					top: calc(100% - $spacing--xs);
-
-					max-width: $spacing--m;
-				}
-			}
-
-			&.active {
-				.bun {
-					top: 9px;
-					max-width: $spacing--l;
-
-					transition: all 0.3s ease-out;
-					transform: rotateZ(-45deg);
-
-					&--bottom {
-						transform: rotateZ(45deg);
-					}
-				}
-			}
-
-			&.white {
-				color: #fff;
-
-				&.active {
-					color: var(--theme-colour);
+					transform: rotateZ(45deg);
 				}
 			}
 		}
 
-		&__container {
-			position: fixed;
-			top: $header-padding - $spacing--xs;
-			right: $header-padding - $spacing--xs;
-			bottom: calc(100% - $spacing--xs);
+		&.white {
+			color: #fff;
 
-			width: 0vw;
+			&.active {
+				color: var(--theme-colour);
+			}
+		}
+	}
 
-			background: var(--theme-background);
+	.container {
+		position: fixed;
+		top: $header-padding - $spacing--xs;
+		right: $header-padding - $spacing--xs;
+		bottom: calc(100% - $spacing--xs);
+
+		width: 0vw;
+		gap: $spacing--m;
+		padding: $spacing--l;
+
+		background: var(--theme-background);
+		opacity: 0;
+
+		z-index: 5;
+		overflow: hidden;
+		pointer-events: none;
+
+		border-radius: 50% 50% 0 50%;
+
+		transition: all 0.4s ease-in;
+
+		@include flex-y;
+
+		& > * {
 			opacity: 0;
-
-			z-index: 5;
-			direction: rtl;
-			overflow: hidden;
-			pointer-events: none;
-
-			border-radius: 50% 50% 0 50%;
-
-			transition: all 0.4s ease-in;
-
-			&.active {
-				width: 100vw;
-				top: 0;
-				right: 0;
-				bottom: 0;
-
-				opacity: 1;
-				border-radius: 0;
-				pointer-events: auto;
-
-				transition: all 0.5s ease-in-out;
-
-				.menu__list {
-					opacity: 1;
-					transition-property: opacity, color;
-					transition-timing-function: ease-in-out;
-					transition-delay: 0.4s, 0s;
-					transition-duration: 0.3s;
-				}
-			}
+			transition: opacity 0.1s ease-out;
 		}
 
-		&__list {
-			position: absolute;
-			top: 50%;
-			left: 50%;
+		&.active {
+			width: 100vw;
+			top: 0;
+			right: 0;
+			bottom: 0;
+
+			opacity: 1;
+			border-radius: 0;
+			pointer-events: auto;
+
+			transition: all 0.5s ease-in-out;
+
+			& > * {
+				opacity: 1;
+
+				transition: opacity 0.4s ease-out 0.5s;
+			}
+		}
+	}
+
+	ul {
+		gap: 20px;
+		padding: 0;
+
+		color: var(--theme-colour);
+
+		overflow: hidden;
+
+		@include flex-y(center);
+
+		& > li {
+			display: block;
+
+			font-size: $font--medium;
+			font-weight: 500;
+			text-align: left;
+			cursor: pointer;
+		}
+	}
+
+	@media screen and (min-width: 1100px) {
+		.container.active {
+			width: 50vw;
+		}
+	}
+
+	@media screen and (min-width: 1400px) {
+		button {
+			display: none;
+			visibility: hidden;
+		}
+
+		.container {
+			position: static;
 
 			height: 100%;
 			width: 100%;
-			gap: 20px;
-			padding: 0 $spacing--xl;
+			padding: 0;
 
-			font-size: $font--heading;
-			color: var(--theme-colour);
+			background: transparent;
+			border-radius: 0;
+			opacity: 1;
 
-			opacity: 0;
-			transform: translate(-50%, -50%);
-			transition: all 0.1s ease-out;
-			overflow: hidden;
+			& > * {
+				opacity: 1;
 
-			@include flex-y(center);
-
-			&-item {
-				display: block;
-				text-align: left;
-				cursor: pointer;
+				pointer-events: auto;
 			}
-		}
 
-		@media screen and (min-width: 1100px) {
-			&__container.active {
-				width: 50vw;
+			ul {
+				position: static;
+				padding: 0;
+
+				justify-content: flex-start;
+
+				transform: translate(0);
+				opacity: 1;
 			}
-		}
 
-		@media screen and (min-width: 1800px) {
-			&__container.active {
-				width: 25vw;
+			&.active {
+				width: 100%;
 			}
 		}
 	}

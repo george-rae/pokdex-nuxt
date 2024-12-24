@@ -3,12 +3,10 @@
 	import type { PropType } from "vue";
 	import { stats } from "~/config/constants";
 
-	const props = defineProps({
+	defineProps({
 		details: { type: Object as PropType<Pokemon>, required: true },
 		info: { type: Object as PropType<Details>, required: true },
 	});
-
-	console.log(props.details);
 
 	const tabs = ["details", "stats", "evolution", "moves"];
 	const tabActive: Ref<string> = ref("details");

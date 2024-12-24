@@ -9,6 +9,11 @@
 	const store = useDetailsStore();
 	const details: ComputedRef<Pokemon> = computed(() => store.details);
 
+	const pokedex = usePokedexStore();
+	const pokemons = pokedex.getPokemon;
+
+	provide("genPokemon", pokemons);
+
 	const type =
 		details.value.types.length > 1
 			? `${details.value.types[0].type.name}-${details.value.types[1].type.name}`
@@ -29,10 +34,9 @@
 
 <template>
 	<main class="pokemon" :class="`pokemon--${type}`">
-		<header class="pokemon__heading">
+		<Navigation :white="true">
 			<Return @pointerup="goBack()" />
-			<Menu :white="true" />
-		</header>
+		</Navigation>
 		<section class="pokemon__main" :class="`pokemon__main--${type}`">
 			<div class="pokemon__info">
 				<hgroup>
@@ -79,14 +83,8 @@
 		alt="Pokeball icon" />
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@use "sass:color";
-
-	body > div {
-		min-height: 100vh;
-
-		@include flex-y(center, center);
-	}
 
 	@mixin background($direction: to left) {
 		@each $type-primary, $colour-primary in $types {
@@ -121,6 +119,15 @@
 		}
 	}
 
+	.header {
+		height: max-content;
+		padding: $spacing;
+
+		color: var(--theme-colour);
+		font-weight: 700;
+		@include flex-x(space-between, center);
+	}
+
 	.pokemon {
 		max-height: 100vh;
 
@@ -140,15 +147,6 @@
 			background-repeat: no-repeat;
 
 			@include flex-y;
-		}
-
-		&__heading {
-			height: max-content;
-			padding: $spacing;
-
-			color: var(--theme-colour);
-			font-weight: 700;
-			@include flex-x(space-between, center);
 		}
 
 		&__info {
@@ -226,14 +224,16 @@
 			width: clamp(250px, 60%, 350px);
 			margin: 0 auto -#{$spacing--xl};
 		}
+	}
 
-		@media screen and (min-width: 700px) {
-			&__image {
-				margin: -#{$spacing--xl * 3} auto -#{$spacing--xl};
-			}
+	@media screen and (min-width: 700px) {
+		.pokemon__image {
+			margin: -#{$spacing--xl * 3} auto -#{$spacing--xl};
 		}
+	}
 
-		@media screen and (min-width: 1024px) {
+	@media screen and (min-width: 1024px) {
+		.pokemon {
 			flex-direction: row;
 			width: clamp(1024px, 100%, 1280px);
 			height: clamp(700px, 100vh - ($spacing * 3), 850px);
@@ -244,18 +244,6 @@
 			overflow: hidden;
 
 			@include background(to bottom);
-
-			&__heading {
-				position: absolute;
-				left: 0;
-				right: 0;
-
-				z-index: 10;
-
-				.menu__button.white {
-					color: var(--theme-colour);
-				}
-			}
 
 			&__main {
 				flex: 0 0 clamp(400px, 40%, 550px);
@@ -272,7 +260,29 @@
 			}
 		}
 
-		@media screen and (min-width: 1800px) {
+		.header {
+			position: absolute;
+			left: 0;
+			right: 0;
+
+			z-index: 10;
+
+			.menu__button.white {
+				color: var(--theme-colour);
+			}
+		}
+	}
+
+	@media screen and (min-width: 1368px) {
+		.header {
+			position: fixed;
+			left: 0;
+			right: 0;
+			top: 0;
+
+			svg > * {
+				stroke: var(--theme-colour);
+			}
 		}
 	}
 </style>
