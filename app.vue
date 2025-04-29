@@ -2,10 +2,14 @@
 	import { loading } from "@/composables/loading";
 	import Theme from "./components/icons/Theme.vue";
 
-	const { theme } = useAppConfig();
+	console.log(themeDark.value);
 	const themeClass: ComputedRef<"theme--dark" | "theme--light"> = computed(() =>
-		theme.dark ? "theme--dark" : "theme--light"
+		themeDark.value ? "theme--dark" : "theme--light"
 	);
+
+	function swapTheme() {
+		themeDark.value = !themeDark.value;
+	}
 
 	const loadState = computed(() => loading.value);
 
@@ -19,7 +23,7 @@
 		<NuxtPage />
 
 		<Loading :class="{ loading: loadState }" />
-		<Theme @theme-change="theme.dark = !theme.dark" />
+		<Theme @theme-change="swapTheme" />
 	</NuxtLayout>
 </template>
 

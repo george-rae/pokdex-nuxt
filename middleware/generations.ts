@@ -2,11 +2,11 @@ import { usePokedexStore } from "~/stores/pokedex";
 
 export default defineNuxtRouteMiddleware(async (to) => {
 	const { id } = to.params;
-	const pokedexId = id === "" ? "national" : id;
+	const pokedexId = id === "" ? "national" : (id as string);
 
-	const parsedId = isNaN(parseFloat(pokedexId as string))
-		? (pokedexId as string)
-		: parseFloat(pokedexId as string);
+	const parsedId = isNaN(parseFloat(pokedexId))
+		? pokedexId
+		: parseFloat(pokedexId);
 
 	const pokedex = usePokedexStore();
 	pokedex.changeGen(parsedId);

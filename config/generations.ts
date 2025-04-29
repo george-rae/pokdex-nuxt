@@ -2,19 +2,19 @@ import type { GenerationsList } from "~/types/pokemon";
 
 const generations: GenerationsList = {
 	1: {
-		label: "Red/Green/Blue",
+		label: "Red/Green/Blue/Yellow",
 		ID: 2,
 	},
 	2: {
-		label: "Gold/Silver",
+		label: "Gold/Silver/Crystal",
 		ID: 3,
 	},
 	3: {
-		label: "Ruby/Sapphire",
+		label: "Ruby/Sapphire/Emerald",
 		ID: 4,
 	},
 	4: {
-		label: "Diamond/Pearl",
+		label: "Diamond/Pearl/Platinum",
 		ID: 6,
 	},
 	5: {

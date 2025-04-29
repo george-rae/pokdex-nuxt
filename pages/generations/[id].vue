@@ -16,12 +16,12 @@
 <template>
 	<main class="pokedex">
 		<Navigation>
-			<h1 class="title" @click="goTo('index')">
+			<h1 class="pokedex__title" @click="goTo('index')">
 				{{ pokedexLabel }}
 				<span v-if="!isString">(Gen {{ ID }})</span>
 			</h1>
 		</Navigation>
-		<section class="cards">
+		<section class="pokedex__cards">
 			<Card
 				v-for="(pokemon, index) in pokemons"
 				:pokemon="pokemon"
@@ -34,7 +34,7 @@
 	</main>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.navigation {
 		span {
 			font-size: clamp($font--body, 0.5em, $font--medium);
@@ -47,22 +47,22 @@
 		overflow: hidden;
 
 		@include flex-y;
-	}
 
-	.cards {
-		display: grid;
-		grid-auto-rows: 25vh;
-		overflow: auto;
+		&__cards {
+			display: grid;
+			grid-auto-rows: 25vh;
+			overflow: auto;
+		}
 	}
 
 	@media screen and (min-width: 700px) {
-		.cards {
+		.pokedex__cards {
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
 	@media screen and (min-width: 1024px) {
-		.cards {
+		.pokedex__cards {
 			grid-auto-rows: 40vh;
 			grid-template-columns: repeat(3, 1fr);
 		}
@@ -72,11 +72,11 @@
 		.pokedex {
 			display: grid;
 			grid-template-columns: 70vw 30vw;
-		}
 
-		.cards {
-			grid-auto-rows: 30vh;
-			order: 1;
+			&__cards {
+				grid-auto-rows: 30vh;
+				order: 1;
+			}
 		}
 
 		.navigation {
@@ -85,7 +85,7 @@
 	}
 
 	@media screen and (min-width: 1800px) {
-		.cards {
+		.pokedex__cards {
 			grid-auto-rows: 40vh;
 		}
 	}
@@ -93,11 +93,11 @@
 	@media screen and (min-width: 1920px) {
 		.pokedex {
 			grid-template-columns: 80vw 20vw;
-		}
 
-		.cards {
-			grid-template-columns: repeat(4, 1fr);
-			grid-auto-rows: 35vh;
+			&__cards {
+				grid-template-columns: repeat(4, 1fr);
+				grid-auto-rows: 35vh;
+			}
 		}
 	}
 </style>

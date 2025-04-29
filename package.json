@@ -10,16 +10,17 @@
 	},
 	"dependencies": {
 		"@pinia/nuxt": "latest",
-		"@vueuse/components": "^11.1.0",
-		"@vueuse/core": "^11.1.0",
-		"@vueuse/nuxt": "^11.1.0",
+		"@vueuse/components": "latest",
+		"@vueuse/core": "latest",
+		"@vueuse/nuxt": "latest",
 		"nuxt": "latest",
+		"typescript": "^5.8.3",
 		"vue": "latest"
 	},
 	"devDependencies": {
 		"sass": "latest"
 	},
 	"engines": {
-		"node": "20.x"
+		"node": ">20"
 	}
 }

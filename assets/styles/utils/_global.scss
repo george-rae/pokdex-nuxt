@@ -1,8 +1,5 @@
 .theme {
 	background: var(--theme-background);
-	min-height: 100vh;
-	max-height: 100vh;
-
 	transition: all 0.3s ease-in-out;
 
 	&--light {
@@ -30,6 +27,7 @@
 
 body {
 	overflow: hidden;
+	min-height: 100vh;
 
 	& > div {
 		min-height: 100vh;
@@ -38,10 +36,10 @@ body {
 
 main {
 	position: relative;
-	min-height: 100vh;
+	height: 100vh;
 	z-index: 1;
 
-	background: var(--theme-background);
+	overflow: auto;
 }
 
 *::-webkit-scrollbar {

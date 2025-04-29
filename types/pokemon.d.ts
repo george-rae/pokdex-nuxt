@@ -119,16 +119,19 @@ export type PokemonList = {
 	details: MinorDetails;
 };
 
-export type Species = {
-	id: number;
+export type speciesMinor = {
 	name: string;
+	is_legendary: boolean;
+	is_mythical: boolean;
+	is_baby: boolean;
+};
+
+export interface Species extends SpeciesMinor {
+	id: number;
 	order: number;
 	gender_rate: number;
 	capture_rate: number;
 	base_happiness: number;
-	is_baby: boolean;
-	is_legendary: boolean;
-	is_mythical: boolean;
 	hatch_counter: number;
 	forms_switchable: boolean;
 	growth_rate: NameURL;
@@ -145,13 +148,15 @@ export type Species = {
 	form_descriptions: PokemonGeneric[];
 	genera: PokemonGeneric[];
 	varieties: PokemonGeneric[];
-};
+}
 
 export type MinorDetails = {
 	id: number;
 	sprite: string?;
 	types: Types[];
+	is_baby: boolean;
 	is_legendary: boolean;
+	is_mythical: boolean;
 };
 
 export type Cries = {

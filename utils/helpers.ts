@@ -49,7 +49,8 @@ export function goTo(
 	const { currentRoute } = router;
 	const isCurrentRoute =
 		currentRoute.value.name === route &&
-		currentRoute.value.params.id === params?.id;
+		currentRoute.value.params.id === params?.id &&
+		currentRoute.value.params.name === params?.name;
 
 	if (isCurrentRoute) return;
 

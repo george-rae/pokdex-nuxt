@@ -33,19 +33,19 @@
 				class="pokemon__section"
 				:class="{ active: tabActive === 'details' }">
 				<hgroup class="pokemon__section-content">
-					<h3>Species</h3>
+					<h4>Species</h4>
 					<p>{{ info.genus }}</p>
 				</hgroup>
 				<hgroup class="pokemon__section-content">
-					<h3>Description</h3>
+					<h4>Description</h4>
 					<p>{{ info.description }}</p>
 				</hgroup>
 				<hgroup class="pokemon__section-content">
-					<h3>Height</h3>
+					<h4>Height</h4>
 					<p>{{ details.height / 10 }}m</p>
 				</hgroup>
 				<hgroup class="pokemon__section-content">
-					<h3>Weight</h3>
+					<h4>Weight</h4>
 					<p>{{ details.weight / 10 }}kg</p>
 				</hgroup>
 
@@ -53,7 +53,7 @@
 				<hgroup
 					class="pokemon__section-content"
 					v-for="ability in details.abilities">
-					<h3>{{ ability.name }}</h3>
+					<h4>{{ ability.name }}</h4>
 					<p>{{ ability.effect }}</p>
 				</hgroup>
 			</article>
@@ -63,7 +63,7 @@
 				<div
 					class="pokemon__section-content"
 					v-for="{ base_stat, stat } in details.stats">
-					<h3>{{ stats[stat.name].name }}</h3>
+					<h4>{{ stats[stat.name].name }}</h4>
 					<p>
 						{{ base_stat }}
 					</p>
@@ -130,7 +130,7 @@
 						v-for="info in Object.entries(move).filter(
 							(entry) => entry[0] !== 'name'
 						)">
-						<h3 :class="`key key--${info[0]}`">{{ info[0] }}</h3>
+						<h4 :class="`key key--${info[0]}`">{{ info[0] }}</h4>
 						<p :class="`value value--${info[0]}`">{{ info[1] }}</p>
 					</hgroup>
 				</section>
@@ -210,7 +210,7 @@
 				display: grid;
 				grid-template-columns: var(--first-col) 1fr;
 
-				h3 {
+				h4 {
 					padding-right: $spacing--s;
 					color: var(--theme-colour-washout);
 				}
@@ -382,7 +382,10 @@
 			}
 		}
 
-		@media screen and (min-width: 1800px) {
+		@media screen and (min-width: 1400px) {
+			&__tabs {
+				padding-top: $spacing--l;
+			}
 		}
 	}
 </style>

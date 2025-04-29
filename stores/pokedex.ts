@@ -1,4 +1,10 @@
-import type { PokeState, PokemonList, MinorDetails } from "@/types/pokemon";
+import type {
+	PokeState,
+	PokemonList,
+	MinorDetails,
+	Species,
+	speciesMinor,
+} from "@/types/pokemon";
 import generations from "~/config/generations";
 
 export const usePokedexStore = defineStore("pokedex", {
@@ -43,15 +49,17 @@ export const usePokedexStore = defineStore("pokedex", {
 				pokemon.map(async (entry: PokemonList) => {
 					// need to get the species first as some pokemon returned from `pokedex` call
 					// do not match their name in the API calls for /pokemon/{name}...
-					const species: { name: string; is_legendary: boolean } =
-						await fetchData("pokemon-species", entry.pokemon_species.name).then(
-							(value) => {
-								return {
-									name: value.varieties[0].pokemon.name,
-									is_legendary: value.is_legendary,
-								};
-							}
-						);
+					const species: speciesMinor = await fetchData(
+						"pokemon-species",
+						entry.pokemon_species.name
+					).then((value) => {
+						return {
+							name: value.varieties[0].pokemon.name,
+							is_legendary: value.is_legendary,
+							is_mythical: value.is_mythical,
+							is_baby: value.is_baby,
+						};
+					});
 
 					const details: MinorDetails = await fetchData(
 						"pokemon",
@@ -62,6 +70,8 @@ export const usePokedexStore = defineStore("pokedex", {
 							id: detail.id,
 							sprite: detail.sprites.other["official-artwork"].front_default,
 							is_legendary: species.is_legendary,
+							is_mythical: species.is_mythical,
+							is_baby: species.is_baby,
 						};
 					});
 

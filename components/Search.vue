@@ -3,14 +3,15 @@
 
 	const pokemons: PokemonList[] | undefined = inject("genPokemon");
 	const list: Ref<HTMLElement | null> = ref(null);
-	const listOpen: Ref<Boolean> = ref(false);
-	const currentSearch: Ref<{ search: String; length: Number }> = ref({
+	const listOpen: Ref<boolean> = ref(false);
+	const currentSearch: Ref<{ search: string; length: number }> = ref({
 		search: "",
 		length: 0,
 	});
 
 	function toggleList() {
-		setTimeout(() => (listOpen.value = !listOpen.value), 150);
+		if (currentSearch.value.search.length >= 2)
+			setTimeout(() => (listOpen.value = !listOpen.value), 150);
 	}
 
 	async function activateList(ev: Event) {
@@ -24,6 +25,9 @@
 			search: value,
 			length: length as number,
 		};
+
+		if (currentSearch.value.search.length >= 2) listOpen.value = true;
+		else listOpen.value = false;
 	}
 </script>
 
@@ -110,7 +114,7 @@
 		pointer-events: none;
 
 		transition-property: visibility, opacity, pointer-events;
-		transition-duration: 0.3s, 0.3s, 0;
+		transition-duration: 0.3s, 0.3s, 0s;
 		transition-delay: 0s, 0s, 0.5s;
 		transition-timing-function: ease-in-out;
 

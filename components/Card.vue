@@ -14,6 +14,11 @@
 	const card = ref<Element | null>(null);
 	const active = ref<boolean>(false);
 
+	let extras: string;
+	if (props.pokemon.details.is_legendary) extras = "Legendary";
+	else if (props.pokemon.details.is_mythical) extras = "Mythical";
+	else if (props.pokemon.details.is_baby) extras = "Baby";
+
 	onMounted(async () => {
 		const observer = new IntersectionObserver(
 			(card) => {
@@ -38,9 +43,7 @@
 		<hgroup class="card__info">
 			<h2 class="card__name">{{ pokemon.pokemon_species.name }}</h2>
 			<h3 class="card__id">Region ID: #{{ pokemon.details.id }}</h3>
-			<span v-if="pokemon.details.is_legendary" class="card__legendary"
-				>Legendary</span
-			>
+			<span v-if="extras" class="card__extras">{{ extras }}</span>
 		</hgroup>
 		<div class="card__types">
 			<p
@@ -141,6 +144,7 @@
 						$colour-primary 60%,
 						color.scale($colour-primary, $lightness: -25%)
 					);
+
 				@include background;
 
 				.list-item__entry {
@@ -154,6 +158,7 @@
 					--card-colour: #{color.scale($colour-secondary, $lightness: -25%)};
 					background: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg"),
 						linear-gradient(225deg, $colour-primary, $colour-secondary);
+
 					@include background;
 
 					.list-item__entry {
@@ -169,7 +174,6 @@
 			display: grid;
 			grid-template: repeat(3, 1fr);
 			gap: $spacing--s;
-			width: 50%;
 
 			z-index: 3;
 		}
@@ -207,8 +211,9 @@
 
 		&__types {
 			gap: $spacing--xs;
-			@include flex-x($align: center);
 			z-index: 10;
+
+			@include flex-x($align: center);
 
 			p {
 				padding: 5px 10px;
@@ -227,12 +232,13 @@
 			}
 		}
 
-		&__legendary {
-			font-size: $font--body;
+		&__extras {
+			font-size: $font--heading;
 			font-weight: 700;
 			color: #fff;
+			text-shadow: var(--card-colour) 2px 2px 5px;
 
-			animation: spooky 2500ms ease-in-out infinite 1500ms;
+			animation: spooky 2000ms ease-in-out infinite 1500ms;
 		}
 
 		img {
@@ -295,7 +301,7 @@
 		}
 		50% {
 			opacity: 0;
-			transform: scale(0.9);
+			transform: scale(0.95);
 		}
 		100% {
 			opacity: 1;

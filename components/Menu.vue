@@ -5,7 +5,9 @@
 		white: Boolean,
 	});
 
-	const menuOpen = ref(false);
+	function toggleMenu() {
+		menuOpen.value = !menuOpen.value;
+	}
 </script>
 
 <template>
@@ -13,7 +15,7 @@
 		type="button"
 		v-if="!isDesktop"
 		:class="{ active: menuOpen, white: white }"
-		@click="menuOpen = !menuOpen">
+		@click="toggleMenu">
 		<span class="bun bun--top"></span>
 		<span class="bun bun--bottom"></span>
 	</button>
@@ -159,9 +161,16 @@
 		}
 	}
 
-	@media screen and (min-width: 1100px) {
-		.container.active {
-			width: 50vw;
+	@media screen and (min-width: 1024px) {
+		button {
+			z-index: 11;
+		}
+
+		.container {
+			z-index: 10;
+			&.active {
+				width: 50vw;
+			}
 		}
 	}
 

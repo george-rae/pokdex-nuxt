@@ -1,9 +1,4 @@
-import type {
-	LangVerGeneric,
-	PokemonGeneric,
-	Pokemon,
-	Moves,
-} from "~/types/pokemon";
+import type { LangVerGeneric, PokemonGeneric, Pokemon } from "~/types/pokemon";
 import { useItem } from "~/config/constants";
 
 export function getEnFlavourText(

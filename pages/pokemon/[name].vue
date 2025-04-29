@@ -30,6 +30,12 @@
 			window.alert(JSON.stringify(e, ["message", "arguments", "type", "name"]));
 		}
 	}
+
+	const currentIndex = pokemons.findIndex(
+		(poke) => poke.details.id === details.value.id
+	);
+
+	console.log(pokemons[currentIndex], pokemons[currentIndex + 1]);
 </script>
 
 <template>
@@ -37,45 +43,47 @@
 		<Navigation :white="true">
 			<Return @pointerup="goBack()" />
 		</Navigation>
-		<section class="pokemon__main" :class="`pokemon__main--${type}`">
-			<div class="pokemon__info">
-				<hgroup>
-					<h1 class="pokemon__name">{{ details.name }}</h1>
-					<div class="pokemon__types">
-						<p
-							class="pokemon__type"
-							v-for="type in details.types"
-							:key="type.type.name"
-							:class="`pokemon__type--${type.type.name}`">
-							{{ type.type.name }}
-						</p>
+		<div class="pokemon__container">
+			<section class="pokemon__main" :class="`pokemon__main--${type}`">
+				<div class="pokemon__info">
+					<hgroup>
+						<h1 class="pokemon__name">{{ details.name }}</h1>
+						<div class="pokemon__types">
+							<p
+								class="pokemon__type"
+								v-for="type in details.types"
+								:key="type.type.name"
+								:class="`pokemon__type--${type.type.name}`">
+								{{ type.type.name }}
+							</p>
+						</div>
+					</hgroup>
+
+					<div class="pokemon__minor">
+						<p class="pokemon__id">#{{ details.id }}</p>
+						<button type="button" class="pokemon__cry" @pointerup="playCry()">
+							<p>Cry</p>
+							<svg
+								id="play-button"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 38 38">
+								<path
+									d="m6,6l26,13.08-26,12.92V6m0-6c-1.09,0-2.19.3-3.15.89C1.08,1.98,0,3.92,0,6v26c0,2.08,1.07,4.01,2.84,5.1.96.6,2.06.9,3.16.9.91,0,1.83-.21,2.67-.63l26-12.92c2.04-1.01,3.32-3.09,3.33-5.36,0-2.27-1.27-4.35-3.3-5.37L8.7.64c-.85-.43-1.77-.64-2.7-.64h0Z"
+									stroke-width="0"
+									stroke="#fff"
+									fill="#fff" />
+							</svg>
+						</button>
 					</div>
-				</hgroup>
-
-				<div class="pokemon__minor">
-					<p class="pokemon__id">#{{ details.id }}</p>
-					<button type="button" class="pokemon__cry" @pointerup="playCry()">
-						<p>Cry</p>
-						<svg
-							id="play-button"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 38 38">
-							<path
-								d="m6,6l26,13.08-26,12.92V6m0-6c-1.09,0-2.19.3-3.15.89C1.08,1.98,0,3.92,0,6v26c0,2.08,1.07,4.01,2.84,5.1.96.6,2.06.9,3.16.9.91,0,1.83-.21,2.67-.63l26-12.92c2.04-1.01,3.32-3.09,3.33-5.36,0-2.27-1.27-4.35-3.3-5.37L8.7.64c-.85-.43-1.77-.64-2.7-.64h0Z"
-								stroke-width="0"
-								stroke="#fff"
-								fill="#fff" />
-						</svg>
-					</button>
 				</div>
-			</div>
-			<img
-				class="pokemon__image"
-				:src="`https://pokedex-images.lon1.cdn.digitaloceanspaces.com/pokemon/image--${details.name}@2x.png`"
-				:alt="`${details.name} sprite`" />
-		</section>
+				<img
+					class="pokemon__image"
+					:src="`https://pokedex-images.lon1.cdn.digitaloceanspaces.com/pokemon/image--${details.name}@2x.png`"
+					:alt="`${details.name} sprite`" />
+			</section>
 
-		<Tabs :info="store" :details="details" />
+			<Tabs :info="store" :details="details" />
+		</div>
 	</main>
 	<img
 		class="background-pokeball"
@@ -83,14 +91,14 @@
 		alt="Pokeball icon" />
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	@use "sass:color";
 
 	@mixin background($direction: to left) {
 		@each $type-primary, $colour-primary in $types {
 			// If there is only one type.
 			&--#{$type-primary} {
-				.pokemon__main {
+				.main {
 					background-image: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg");
 				}
 
@@ -105,7 +113,7 @@
 			// If there is more than one type
 			@each $type-secondary, $colour-secondary in $types {
 				&--#{$type-primary}-#{$type-secondary} {
-					.pokemon__main {
+					.main {
 						background-image: url("https://pokedex-images.lon1.cdn.digitaloceanspaces.com/icons/#{$type-primary}.svg");
 					}
 
@@ -119,15 +127,6 @@
 		}
 	}
 
-	.header {
-		height: max-content;
-		padding: $spacing;
-
-		color: var(--theme-colour);
-		font-weight: 700;
-		@include flex-x(space-between, center);
-	}
-
 	.pokemon {
 		max-height: 100vh;
 
@@ -136,6 +135,12 @@
 
 		@include background;
 		@include flex-y;
+
+		&__container {
+			height: 100%;
+
+			@include flex-y;
+		}
 
 		&__main {
 			gap: $spacing;
@@ -204,7 +209,7 @@
 			border: 0;
 
 			cursor: pointer;
-			z-index: 20;
+			z-index: 5;
 
 			@include flex-y(center, center);
 
@@ -234,16 +239,21 @@
 
 	@media screen and (min-width: 1024px) {
 		.pokemon {
-			flex-direction: row;
-			width: clamp(1024px, 100%, 1280px);
-			height: clamp(700px, 100vh - ($spacing * 3), 850px);
-			min-height: 0;
-
-			border-radius: $spacing;
-			box-shadow: 2px 2px 10px 5px rgba(66, 66, 66, 0.1);
 			overflow: hidden;
 
 			@include background(to bottom);
+
+			&__container {
+				flex-direction: row;
+				height: calc(100vh - $spacing--l * 2);
+				width: calc(100vw - $spacing--l * 2);
+				margin: auto;
+
+				overflow: hidden;
+
+				border-radius: $spacing--l;
+				background: rgba(#fff, 0.1);
+			}
 
 			&__main {
 				flex: 0 0 clamp(400px, 40%, 550px);
@@ -255,33 +265,57 @@
 			}
 
 			&__image {
-				width: clamp(300px, 100%, 450px);
+				width: clamp(300px, 100%, 800px);
 				margin: 0 auto;
-			}
-		}
-
-		.header {
-			position: absolute;
-			left: 0;
-			right: 0;
-
-			z-index: 10;
-
-			.menu__button.white {
-				color: var(--theme-colour);
 			}
 		}
 	}
 
-	@media screen and (min-width: 1368px) {
-		.header {
-			position: fixed;
-			left: 0;
-			right: 0;
-			top: 0;
+	@media screen and (min-width: 1400px) {
+		.pokemon {
+			display: grid;
+			grid-template-columns: 70vw 30vw;
 
-			svg > * {
-				stroke: var(--theme-colour);
+			&__container {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				height: 100%;
+				width: 100%;
+				border-radius: 0;
+			}
+		}
+
+		.navigation {
+			position: static;
+			order: 2;
+			background: var(--theme-background);
+
+			& > svg {
+				position: fixed;
+				top: $spacing;
+				left: $spacing;
+			}
+		}
+	}
+
+	@media screen and (min-width: 1920px) {
+		.pokemon {
+			grid-template-columns: 80vw 20vw;
+
+			&__container {
+				$sizing: calc(100% - $spacing--xl * 2.5);
+				height: $sizing;
+				width: $sizing;
+				border-radius: $spacing;
+			}
+
+			&__main {
+				justify-content: space-between;
+				padding-top: $spacing--l;
+			}
+
+			&__name {
+				font-size: 48px;
 			}
 		}
 	}

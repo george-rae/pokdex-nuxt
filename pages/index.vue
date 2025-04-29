@@ -29,10 +29,10 @@
 <style lang="scss">
 	.generations {
 		gap: $spacing--m;
-		min-height: 100vh;
+		height: max(100vh, 100vh);
 		padding: $spacing--xl $spacing--m;
 
-		@include flex-y;
+		@include flex-y($align: center);
 
 		&__header {
 			color: transparent;
@@ -110,7 +110,6 @@
 		}
 
 		@media screen and (min-width: 600px) {
-			height: 100%;
 			padding: $spacing--m;
 
 			&__item {
@@ -119,9 +118,6 @@
 		}
 
 		@media screen and (min-width: 900px) {
-			justify-content: center;
-			align-items: center;
-
 			&__item {
 				flex-basis: calc(33% - 18px);
 
